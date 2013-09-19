@@ -1,0 +1,42 @@
+{
+  "name": "",
+  "description": "",
+  "homepage": "",
+  "keywords": [
+    ""
+  ],
+  "author": "Le bib",
+  "dependencies": {
+    "underscore": "latest",
+    "express": "latest",
+    "socket.io": "latest",
+    "pg": "latest",
+    "knex": "latest",
+    "jshint": "latest"
+  },
+  "license": "GPL v2",
+  "devDependencies": {
+    "jshint": "*",
+    "grunt": "~0.4.1",
+    "grunt-concurrent": "latest",
+    "grunt-nodemon": "latest",
+    "grunt-contrib-watch": "latest",
+    "grunt-contrib-compass": "latest",
+    "grunt-contrib-jade": "latest",
+    "grunt-contrib-copy": "latest",
+    "grunt-exec": "latest",
+    "grunt-contrib-jshint": "latest"
+  },
+  "engines": {
+    "node": ">=1.1.0",
+    "npm": ">=1.0"
+  },
+  "repositories": [
+    {
+      "type": "git",
+      "url": "http://github.com"
+    }
+  ],
+  "dojoBuild": "server.profile.js",
+  "version": "1.0.0"
+}
