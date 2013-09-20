@@ -62,10 +62,12 @@ oops.checkPlace = function(lat, lon) {
                 })
                     .addTo(map);
             });
-            console.log(currentPopup);
-            currentPopup.setLatLng(marker.getLatLng());
+
+            var markerLatLng = marker.getLatLng();
+            currentPopup.setLatLng([markerLatLng.lat, markerLatLng.lng]);
             currentPopup.setContent(html);
             currentPopup.openOn(map);
+            oops.showGraph(result[0]);
         });
 }
 
@@ -82,4 +84,13 @@ oops.addPrune = function(lat, lon) {
                 console.log("Sample of data:", data);
             }
         });
+}
+
+oops.showGraph = function(datas) {
+    //console.log(datas);
+    if (datas && datas.length) {
+        datas.prunes.forEach(function(prune) {
+            //console.log(prune);
+        });
+    }
 }
