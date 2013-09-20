@@ -10,12 +10,12 @@ var currentLayer = null
 var currentPopup = null;
 
 oops.loadTemplate = function(name) {
-    jQuery("div#content")
+    $("div#content")
         .html(tpl(name));
 }
 
 oops.checkPlace = function(lat, lon) {
-    jQuery.ajax({
+    $.ajax({
         url: "/checkPlace",
         data: {
             lat: lat,
@@ -73,7 +73,7 @@ oops.checkPlace = function(lat, lon) {
 }
 
 oops.addPrune = function(lat, lon) {
-    jQuery.ajax({
+    $.ajax({
         url: "/addPrune",
         data: {
             lat: lat,
