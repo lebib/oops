@@ -106,9 +106,14 @@ exports.injectFakeDatas = function() {
         .select('gid')
         .then(function(result) {
             result.forEach(function(res) {
-                var num = Math.floor((Math.random() * 10) + 1);
-                for (var i = 0; i < num; i++) {
-                    addPruneForRoad(res.gid, "2012-09-" + num, '', function(err) {
+                var jour = Math.floor((Math.random() * 29) + 1);
+                var h = Math.floor(Math.random() * 10 + 9); 
+                var min = Math.floor(Math.random() * 60);
+                var heure = h + ':' + min
+                h = heure + ":" + min;
+                for (var i = 0; i < jour; i++) {
+                    console.log("2012-09-" + jour + ' ' + heure)
+                    // addPruneForRoad(res.gid, "2012-09-" + jour + ' ' + heure, '', function(err) {
                         if (err) {
                             console.log("Error creating Prune: " + err);
                         }

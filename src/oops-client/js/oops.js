@@ -112,12 +112,24 @@ oops.showGraph = function(datas) {
             xlim: [-100, 100],
             ylim: [-100, 100]
          };
-         console.log(grapharray);
-         console.log(paramz);
+         // console.log(grapharray);
+         // console.log(paramz);
          plot('#graphz', paramz);
          plot.plot(grapharray, {stroke: "blue"});
-         // plot.plot(, {stroke: "red"});
-
+         for (var i=0;i<100;i++) { 
+            heure = Math.floor(Math.random() * 10 + 9); 
+            min = Math.floor(Math.random() * 60);
+            h = heure + ":" + min;
+            // console.log(heure);
+            // console.log(min);
+            console.log(h);
+         }
+         /*
+            TODO GRAPHZ:
+            * prunes par heures 
+            * % probabilité d'allumage par une pervanche
+            * 
+         */
         // Render the image.
         plot.draw();
     }
