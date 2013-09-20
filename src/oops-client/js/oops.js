@@ -91,7 +91,7 @@ oops.showGraph = function(datas) {
     //console.log(datas);
     var grapharray = [];
     var i = 0;
-    if (datas && datas.length) {
+    if (datas) {
         datas.prunes.forEach(function(prune) {
             i++;
             console.log(prune);
