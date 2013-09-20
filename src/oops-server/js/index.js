@@ -114,10 +114,10 @@ exports.injectFakeDatas = function() {
                 for (var i = 0; i < jour; i++) {
                     console.log("2012-09-" + jour + ' ' + heure)
                     // addPruneForRoad(res.gid, "2012-09-" + jour + ' ' + heure, '', function(err) {
-                        if (err) {
-                            console.log("Error creating Prune: " + err);
-                        }
-                    });
+                    //     if (err) {
+                    //         console.log("Error creating Prune: " + err);
+                    //     }
+                    // });
                 }
             });
         }, function(err) {
