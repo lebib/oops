@@ -1,6 +1,17 @@
+$default-text-shadow-color: rgba(gray, 0.6);
+$default-text-shadow-blur: 3px;
+$default-text-shadow-v-offset: 1px;
 @import "compass/reset";
+@import "compass";
+
 
 #map { 
     height: 380px; 
     width: 550px; 
+}
+
+.popupTitle {
+	font-weight: bold;
+	margin-bottom: 3px;
+	@include single-text-shadow;
 }

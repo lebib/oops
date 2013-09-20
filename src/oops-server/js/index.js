@@ -18,7 +18,7 @@ exports.init = function(config, cb) {
 };
 
 exports.checkPlace = function(lat, lon, cb) {
-    getNearRoad(lat, lon, 8, function(result) {
+    getNearRoad(lat, lon, 1, function(result) {
         if (!result) {
             cb("No road found found");
         } else {

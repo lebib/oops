@@ -6,6 +6,7 @@ define = function(jade, cb) {
 
 var oops = {};
 var currentLayer = null
+var currentPopup = null;
 
 oops.loadTemplate = function(name) {
     $("div#content")
@@ -21,10 +22,18 @@ oops.checkPlace = function(lat, lon) {
         }
     })
         .done(function(result) {
+            var prunesList = [];
+            var html = '<div class="popupTitle">Contraventions relevées dans cette rue</div>';
             var style = {
                 weight: 5,
                 opacity: 0.8,
                 color: "#777777"
+            }
+            if (!currentPopup) {
+                currentPopup = L.popup();
+            }
+            if (currentLayer) {
+                map.removeLayer(currentLayer);
             }
             result.forEach(function(line) {
                 switch (line.tarif) {
@@ -38,14 +47,25 @@ oops.checkPlace = function(lat, lon) {
                         style.color = "#01DF01";
                         break;
                 }
-                if (currentLayer) {
-                    map.removeLayer(currentLayer);
+                if (line.prunes.length) {
+                    line.prunes.forEach(function(p) {
+                            var n=p.prune_date.match(/([0-9]+)/g);
+                            var day = n[0]+'/'+n[1]+'/'+n[2];
+                            var hour = n[4]+'h '+n[5]+'min';
+                            prunesList.push('Le '+day+' à '+hour);
+                    })
                 }
+                html += prunesList.join("<br />");
+                //prunesList.push(JSON.parse(line.prunes));
                 currentLayer = L.geoJson(JSON.parse(line.geojson), {
                     style: style
                 })
                     .addTo(map);
             });
+            console.log(currentPopup);
+            currentPopup.setLatLng(marker.getLatLng());
+            currentPopup.setContent(html);
+            currentPopup.openOn(map);
         });
 }
 
