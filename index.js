@@ -53,7 +53,7 @@ function initExpress() {
 	});
 
 	app.get('/checkPlace', function(req, res) {
-		oops.checkPlace(req.params.lat, req.params.lon);
+		oops.checkPlace(req.query.lat, req.query.lon);
 	});
 
 	// Start server
