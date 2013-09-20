@@ -13,4 +13,11 @@ $default-text-shadow-v-offset: 1px;
 	font-weight: bold;
 	margin-bottom: 3px;
 	@include single-text-shadow;
+	font-family: xkcd;
+	width: 280px;
+}
+
+@font-face {
+    font-family: "xkcd";
+    src: url('../fonts/Humor-Sans.ttf');
 }
