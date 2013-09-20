@@ -20,3 +20,7 @@ exports.init = function(config, cb) {
 exports.checkPlace = function(lat, lon) {
 	console.log(lat+" -- "+lon);
 }
+
+exports.addPrune = function(lat, lon) {
+	console.log(lat+" -- "+lon);
+}

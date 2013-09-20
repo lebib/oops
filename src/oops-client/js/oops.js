@@ -25,7 +25,7 @@ oops.checkPlace = function(lat, lon) {
 
 oops.addPrune = function(lat, lon) {
         $.ajax({
-        url: "/checkPlace",
+        url: "/addPrune",
         data: {lat: lat, lon: lon}
     })
         .done(function(data) {

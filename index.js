@@ -56,6 +56,10 @@ function initExpress() {
 		oops.checkPlace(req.query.lat, req.query.lon);
 	});
 
+	app.get('/addPrune', function(req, res) {
+		oops.addPrune(req.query.lat, req.query.lon);
+	});
+
 	// Start server
 	var server = app.listen(config.server.port);
 	var io = require('socket.io')
