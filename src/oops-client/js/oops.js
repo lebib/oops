@@ -17,7 +17,25 @@ oops.checkPlace = function(lat, lon) {
         data: {lat: lat, lon: lon}
     })
         .done(function(result) {
-            L.geoJson(JSON.parse(result[0].geojson)).addTo(map);
+            var style = {
+                weight: 5,
+                opacity: 0.8,
+                color: "#777777"
+            }
+            result.forEach(function(line) {
+                switch(line.tarif) {
+                   case 'jaune':
+                    style.color = "#FFFF00";
+                    break;
+                    case 'orange':
+                    style.color = "#FFBF00";
+                    break;
+                    case 'vert':
+                    style.color = "#01DF01"
+                    break;
+                } 
+                L.geoJson(JSON.parse(line.geojson), {style: style}).addTo(map);
+            });
         });
 }
 

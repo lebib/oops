@@ -30,7 +30,7 @@ exports.addPrune = function(lat, lon) {
 var getNearRoad = function(lat, lon, cb) {
     lat = parseFloat(lat);
     lon = parseFloat(lon);
-    knex("opennodata").select(knex.raw("gid, ST_AsGeoJson(ST_Transform(geom, 4326)) as geojson")).orderBy(knex.raw("ST_Transform(ST_SetSRID(ST_MakePoint("+lon+", "+lat+"), 4326), 2154) <-> geom")).limit(1).then(function(result) {
+    knex("opennodata").select(knex.raw("gid, tarifs2011 as tarif, ST_AsGeoJson(ST_Transform(geom, 4326)) as geojson")).orderBy(knex.raw("ST_Transform(ST_SetSRID(ST_MakePoint("+lon+", "+lat+"), 4326), 2154) <-> geom")).limit(8).then(function(result) {
         cb(result);
     }, function(err) {
         console.log("SQL Error: "+err);
