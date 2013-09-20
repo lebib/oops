@@ -98,7 +98,20 @@ oops.showGraph = function(datas) {
             //build array
             grapharray.push({x: i, y: i});
         });
-        // var plot = xkcdplot();
-        // plot('graphz');
+         var plot = xkcdplot();
+         paramz = {
+            title: "test",
+            xlabel: "derp",
+            ylabel: "herp",
+            xlim: [-10, 10],
+            ylim: [-10,10]
+         };
+         console.log(grapharray);
+         plot('#graphz', paramz);
+         plot.plot(grapharray, {stroke: "red"});
+         // plot.plot(, {stroke: "red"});
+
+        // Render the image.
+        plot.draw();
     }
 }
