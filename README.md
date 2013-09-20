@@ -24,5 +24,6 @@ Install described for Debian, too lazy so update for your distro.
 - Change database owner
 [postgres@biatch BIB]$  psql -c "ALTER DATABASE oops OWNER TO oops;"
 
-- Change table owner
+- Change tables owner
 [postgres@biatch BIB]$  psql  oops -c "ALTER Table opennodata OWNER TO oops;"
+[postgres@biatch BIB]$  psql  oops -c "ALTER Table spatial_ref_sys OWNER TO oops;"
