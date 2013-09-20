@@ -16,19 +16,22 @@ Install described for Debian, too lazy so update for your distro.
 	[postgres@biatch ~]$ psql -d oops -c "CREATE EXTENSION postgis;"
 
 - CWD inside the OOPS project and inject Montpellier opendata:
-	[postgres@biatch BIB]$ psql oops -f resources/sql/opendata_MTP.sql
+	[postgres@biatch oops]$ psql oops -f resources/sql/opendata_MTP.sql
 
 - Create oops table
-	[postgres@biatch BIB]$ psql oops -f resources/sql/oops.sql
+	[postgres@biatch oops]$ psql oops -f resources/sql/oops.sql
 
 
 - Create role:
-[postgres@biatch BIB]$  psql -c "CREATE USER oops WITH PASSWORD 'pouet';"
+[postgres@biatch oops]$  psql -c "CREATE USER oops WITH PASSWORD 'pouet';"
 
 - Change database owner
-[postgres@biatch BIB]$  psql -c "ALTER DATABASE oops OWNER TO oops;"
+[postgres@biatch oops]$  psql -c "ALTER DATABASE oops OWNER TO oops;"
 
 - Change tables owner
-[postgres@biatch BIB]$  psql  oops -c "ALTER Table opennodata OWNER TO oops;"
-[postgres@biatch BIB]$  psql  oops -c "ALTER Table spatial_ref_sys OWNER TO oops;"
-[postgres@biatch BIB]$  psql  oops -c "ALTER Table prunes OWNER TO oops;"
+[postgres@biatch oops]$  psql  oops -c "ALTER Table opennodata OWNER TO oops;"
+[postgres@biatch oops]$  psql  oops -c "ALTER Table spatial_ref_sys OWNER TO oops;"
+[postgres@biatch oops]$  psql  oops -c "ALTER Table prunes OWNER TO oops;"
+
+- Inject fake prunes
+[postgres@biatch oops] psql oops -f resources/sql/fake_prunes.sql

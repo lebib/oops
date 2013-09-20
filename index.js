@@ -32,7 +32,6 @@ oops.init(config, function() {
 
 function initExpress() {
 	app.configure(function() {
-		app.set('views', 'views');
 		app.use(express.favicon('public/img/favicon.ico'));
 		app.use(express.bodyParser({
 			uploadDir: __dirname + path.sep + config.tmpdir
@@ -58,8 +57,10 @@ function initExpress() {
 		});
 	});
 
-	app.get('/addPrune', function(req, res) {
-		oops.addPrune(req.query.lat, req.query.lon);
+	app.post('/addPrune', function(req, res) {
+		oops.addPrune(req.query.lat, req.query.lon, req.query.date, req.query.comment, function(result) {
+			res.json(req, result);
+		});
 	});
 
 	// Start server

@@ -34,7 +34,7 @@ oops.checkPlace = function(lat, lon) {
                         style.color = "#FFBF00";
                         break;
                     case 'vert':
-                        style.color = "#01DF01"
+                        style.color = "#01DF01";
                         break;
                 }
                 L.geoJson(JSON.parse(line.geojson), {

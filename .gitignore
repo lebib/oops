@@ -3,3 +3,4 @@ config/config.json
 .sass-cache
 public/css/*
 public/js/oops.js
+public/js/views/*.js
