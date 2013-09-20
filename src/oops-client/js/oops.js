@@ -14,7 +14,10 @@ oops.loadTemplate = function(name) {
 oops.checkPlace = function(lat, lon) {
     $.ajax({
         url: "/checkPlace",
-        data: {lat: lat, lon: lon}
+        data: {
+            lat: lat,
+            lon: lon
+        }
     })
         .done(function(result) {
             var style = {
@@ -23,26 +26,32 @@ oops.checkPlace = function(lat, lon) {
                 color: "#777777"
             }
             result.forEach(function(line) {
-                switch(line.tarif) {
-                   case 'jaune':
-                    style.color = "#FFFF00";
-                    break;
+                switch (line.tarif) {
+                    case 'jaune':
+                        style.color = "#FFFF00";
+                        break;
                     case 'orange':
-                    style.color = "#FFBF00";
-                    break;
+                        style.color = "#FFBF00";
+                        break;
                     case 'vert':
-                    style.color = "#01DF01"
-                    break;
-                } 
-                L.geoJson(JSON.parse(line.geojson), {style: style}).addTo(map);
+                        style.color = "#01DF01"
+                        break;
+                }
+                L.geoJson(JSON.parse(line.geojson), {
+                    style: style
+                })
+                    .addTo(map);
             });
         });
 }
 
 oops.addPrune = function(lat, lon) {
-        $.ajax({
+    $.ajax({
         url: "/addPrune",
-        data: {lat: lat, lon: lon}
+        data: {
+            lat: lat,
+            lon: lon
+        }
     })
         .done(function(data) {
             if (console && console.log) {

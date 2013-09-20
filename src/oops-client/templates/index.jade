@@ -7,17 +7,15 @@ script.
     var pd = new L.marker([43.6100, 3.8742], {draggable: true}).addTo(map);
     pd.on('dragend', function(evt) {
         var latlng = this.getLatLng();
+            oops.checkPlace(latlng.lat, latlng.lng);
+            /*
                 popup
             .setLatLng(latlng)
             .setContent('Hey ' + latlng.toString() + ' !')
             .openOn(map);
+            */
     });
     map.addLayer(osm);
     var popup = L.popup();
 
-    function onMapClick(e) {
-        oops.checkPlace(e.latlng.lat, e.latlng.lng);
-    }
-    map.on('click',onMapClick);
-    //marker.on('dragend', alert('fu'));
 #map
