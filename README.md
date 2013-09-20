@@ -18,6 +18,10 @@ Install described for Debian, too lazy so update for your distro.
 - CWD inside the OOPS project and inject Montpellier opendata:
 	[postgres@biatch BIB]$ psql oops -f resources/sql/opendata_MTP.sql
 
+- Create oops table
+	[postgres@biatch BIB]$ psql oops -f resources/sql/oops.sql
+
+
 - Create role:
 [postgres@biatch BIB]$  psql -c "CREATE USER oops WITH PASSWORD 'pouet';"
 
@@ -27,3 +31,4 @@ Install described for Debian, too lazy so update for your distro.
 - Change tables owner
 [postgres@biatch BIB]$  psql  oops -c "ALTER Table opennodata OWNER TO oops;"
 [postgres@biatch BIB]$  psql  oops -c "ALTER Table spatial_ref_sys OWNER TO oops;"
+[postgres@biatch BIB]$  psql  oops -c "ALTER Table prunes OWNER TO oops;"
