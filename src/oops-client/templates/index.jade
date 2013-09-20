@@ -1,21 +1,16 @@
-link(type="text/css", rel="stylesheet", href="js/leaflet/leaflet.css")
+link(type="text/css", rel="stylesheet", href="/js/leaflet/leaflet.css")
 script(src="/js/leaflet/leaflet.js")
 script.
     var map = new L.Map('map', {center: new L.LatLng(43.6024, 3.87414), zoom: 14});
     var osm = new L.TileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png');
 
-    var pd = new L.marker([43.6024, 3.87414], {draggable: true}).addTo(map);
-    pd.on('dragend', function(evt) {
+    var marker = new L.marker([43.6024, 3.87414], {draggable: true}).addTo(map);
+    marker.on('dragend', function(evt) {
         var latlng = this.getLatLng();
             oops.checkPlace(latlng.lat, latlng.lng);
-            /*
-                popup
-            .setLatLng(latlng)
-            .setContent('Hey ' + latlng.toString() + ' !')
-            .openOn(map);
-            */
     });
+    marker.bindPopup();
     map.addLayer(osm);
     var popup = L.popup();
 
-#map
+ #map

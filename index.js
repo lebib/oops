@@ -57,12 +57,6 @@ function initExpress() {
 		});
 	});
 
-	app.get('/getPrunes', function(req, res) {
-		oops.getPrune(req.query.lat, req.query.lon, function(result) {
-			res.json(req, result);
-		});
-	});
-
 	app.post('/addPrune', function(req, res) {
 		oops.addPrune(req.query.lat, req.query.lon, req.query.date, req.query.comment, function(result) {
 			res.json(req, result);

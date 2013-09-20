@@ -23,8 +23,10 @@ exports.checkPlace = function(lat, lon, cb) {
             cb("No road found found");
         } else {
             getPrunes(result, function(err, prunes) {
-                console.log(prunes);
-                cb(err, result);
+                if (err) {
+                    console.log(err);
+                }
+                cb(prunes);
             }, 0)
         }
     })
@@ -39,26 +41,38 @@ exports.addPrune = addPrune = function(lat, lon, date, comment, cb) {
 exports.getPrunes = getPrunes = function(arr, cb, i, ret) {
     var ret = ret || [];
     var recursive = false;
-    if (typeof(arr) != 'string') {
-        gid = arr;
-        recursive = true;
+    var gid = null;
+    var geojson = null;
+    if (typeof(arr) == 'string') {
+        gid = arr.gid;
+        geojson = arr.geojson;
+        tarif = arr.tarif;
     } else {
         gid = arr[i].gid;
+        geojson = arr[i].geojson;
+        tarif = arr[i].tarif;
+        recursive = true;
     }
     knex("prunes")
-        .select("*")
+        .select(['pid', 'prune_date', 'comment'])
         .where({
             gid: gid
         })
         .then(function(prunes) {
             if ((i || i === 0) && recursive) {
+                ret[i] = {};
+                ret[i].geojson = geojson;
+                ret[i].prunes = prunes;
+                ret[i].tarif = tarif;
                 i++;
                 if (i < arr.length) {
-                    ret.push(prunes);
                     getPrunes(arr, cb, i, ret);
                 } else {
                     cb(null, ret)
                 }
+            } else {
+                ret['geojson'] = geojson;
+                ret['prunes'].push(prunes);
             }
         }, function(err) {
             cb(err);

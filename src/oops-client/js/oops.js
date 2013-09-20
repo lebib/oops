@@ -5,6 +5,7 @@ define = function(jade, cb) {
 }
 
 var oops = {};
+var currentLayer = null
 
 oops.loadTemplate = function(name) {
     $("div#content")
@@ -37,7 +38,10 @@ oops.checkPlace = function(lat, lon) {
                         style.color = "#01DF01";
                         break;
                 }
-                L.geoJson(JSON.parse(line.geojson), {
+                if (currentLayer) {
+                    map.removeLayer(currentLayer);
+                }
+                currentLayer = L.geoJson(JSON.parse(line.geojson), {
                     style: style
                 })
                     .addTo(map);
