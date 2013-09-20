@@ -52,8 +52,8 @@ function initExpress() {
 		res.sendfile(__dirname + '/public/index.html');
 	});
 
-	app.get('/getWarnings', function(req, res) {
-		console.log('hop');
+	app.get('/checkPlace', function(req, res) {
+		oops.checkPlace(req.params.lat, req.params.lon);
 	});
 
 	// Start server

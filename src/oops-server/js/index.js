@@ -16,3 +16,7 @@ exports.init = function(config, cb) {
 	});
 	cb();
 };
+
+exports.checkPlace = function(lat, lon) {
+	console.log(lat+" -- "+lon);
+}

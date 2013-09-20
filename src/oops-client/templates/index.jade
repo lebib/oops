@@ -1,0 +1,19 @@
+link(type="text/css", rel="stylesheet", href="js/leaflet/leaflet.css")
+script(src="/js/leaflet/leaflet.js")
+script.
+    var map = new L.Map('map', {center: new L.LatLng(43.6100, 3.8742), zoom: 13});
+    var osm = new L.TileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png');
+    map.addLayer(osm);
+
+    var marker = L.marker([43.6100, 3.8742]).addTo(map);
+    var popup = L.popup();
+
+    function onMapClick(e) {
+        popup
+         .setLatLng(e.latlng)
+            .setContent("You clicked the map at " + e.latlng.toString())
+            .openOn(map);
+    }
+    map.on('click',onMapClick);
+
+#map

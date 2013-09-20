@@ -10,7 +10,7 @@ module.exports = function(grunt) {
 				tasks: 'compile-sass'
 			},
 			jade: {
-				files: ['src/templates/**/*.jade'],
+				files: ['src/oops-client/templates/**/*.jade'],
 				tasks: 'compile-jade'
 			},
 			copyserver : {
@@ -42,7 +42,7 @@ module.exports = function(grunt) {
 					file: 'index.js',
 					args: ['development'],
 					nodeArgs: ['--debug'],
-					ignoredFiles: ['Gruntfile.js', 'public/*js'],
+					ignoredFiles: ['Gruntfile.js', 'public/**/*js', 'src/oops-client/**/*js'],
 					watchedExtensions: ['js'],
 					delayTime: 1,
 					env: {
@@ -67,14 +67,15 @@ module.exports = function(grunt) {
 				options: {
 					client: true,
 					compileDebug: true,
-					amd: true,
+					amd: false,
+					namespace: false,
 					processName: function(filename) {
-						return filename.replace('src/oops-server/templates/', '')
+						return filename.replace('src/oops-client/templates/', '')
 							.replace('.jade', '');
 					}
 				},
 				files: {
-					"public/views/templates.js": ["src/oops-server/templates/*.jade"],
+					"public/views/templates.js": ["src/oops-client/templates/*.jade"],
 				}
 			},
 			compile: {
@@ -82,13 +83,14 @@ module.exports = function(grunt) {
 					client: true,
 					compileDebug: false,
 					amd: true,
+					namespace: false,
 					processName: function(filename) {
-						return filename.replace('src/oops-server/templates/', '')
+						return filename.replace('src/oops-client/templates/', '')
 							.replace('.jade', '');
 					}
 				},
 				files: {
-					"public/views/templates.js": ["src/oops-server/templates/*.jade"]
+					"public/js/views/templates.js": ["src/oops-client/templates/*.jade"]
 				}
 
 			}
@@ -100,7 +102,7 @@ module.exports = function(grunt) {
 						expand: true,
 						cwd: 'src/oops-client/js',
 						src: ['**/*.js', '!package.js', '!.~', '!.#*'],
-						dest: 'public/js/client',
+						dest: 'public/js',
 						filter: 'isFile'
 					},
 				      ]

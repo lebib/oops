@@ -3,42 +3,20 @@
 <head>
 	<meta charset="utf-8">
 	<title>Oops</title>
-	<meta content="width=device-width, initial-scale=1.0" name="viewport">
-	<link rel="stylesheet" href="./style.css">
-	<link rel="stylesheet" href="./leaflet/leaflet.css" />
-	<!--[if lte IE 8]>
-		 <link rel="stylesheet" href="./leaflet/leaflet.ie.css" />
-	<![endif]-->
 	<script>
 	</script>
 	<link rel="stylesheet" type="text/css" href="/css/oops.css"  media="screen, projection"></link>
-	<script src="js/jade/runtime.js"></script>
-	<style>
-    #map { height: 380px; width: 550px; }
-	</style>
-</head>
-<body class="claro">
-	<div id="map"></div>
-	<script src="./leaflet/leaflet.js"></script>
-	<script type='text/javascript'>
-		var map = new L.Map('map', {center: new L.LatLng(43.6100, 3.8742), zoom: 13});
-		var osm = new L.TileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png');
-		map.addLayer(osm);
-
-		var marker = L.marker([43.6100, 3.8742]).addTo(map);
-		var popup = L.popup();
-
-		function onMapClick(e) {
-		    popup
-		        .setLatLng(e.latlng)
-		        .setContent("You clicked the map at " + e.latlng.toString())
-		        .openOn(map);
-		}
-		function fu() {
-			alert('fu');
-		}
-
-		map.on('click',onMapClick);
+	<script src="/js/jquery/jquery-1.10.2.min.js"></script>
+	<script src="/js/oops.js"></script>
+	<script>
+	$(document)
+   	 .ready(function() {
+	    	oops.loadTemplate('index');
+   	 });
 	</script>
+	<script src="/js/views/templates.js"></script>
+</head>
+<body>
+	<div id="content"></div>
 </body>
 </html>
