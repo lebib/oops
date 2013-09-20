@@ -14,11 +14,14 @@
 	<script src="/js/oops.js"></script>
 	<script src="/js/jquery-mobile/jquery.mobile-1.3.2.min.js"></script>
 	<script>
-	$(document)
+	jQuery.noConflict();
+	jQuery(document)
    	 .ready(function() {
 	    	oops.loadTemplate('index');
    	 });
 	</script>
+	<script src="/js/d3/d3.v2.min.js"></script>
+	<script src="/js/d3/xkcd.js"></script>
 	<script src="/js/views/templates.js"></script>
 </head>
 <body>

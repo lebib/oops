@@ -1,4 +1,5 @@
-$ = jQuery;
+
+
 var tpl;
 define = function(jade, cb) {
     tpl = cb();
@@ -9,12 +10,12 @@ var currentLayer = null
 var currentPopup = null;
 
 oops.loadTemplate = function(name) {
-    $("div#content")
+    jQuery("div#content")
         .html(tpl(name));
 }
 
 oops.checkPlace = function(lat, lon) {
-    $.ajax({
+    jQuery.ajax({
         url: "/checkPlace",
         data: {
             lat: lat,
@@ -72,7 +73,7 @@ oops.checkPlace = function(lat, lon) {
 }
 
 oops.addPrune = function(lat, lon) {
-    $.ajax({
+    jQuery.ajax({
         url: "/addPrune",
         data: {
             lat: lat,
@@ -88,9 +89,16 @@ oops.addPrune = function(lat, lon) {
 
 oops.showGraph = function(datas) {
     //console.log(datas);
+    var grapharray = [];
+    var i = 0;
     if (datas && datas.length) {
         datas.prunes.forEach(function(prune) {
-            //console.log(prune);
+            i++;
+            console.log(prune);
+            //build array
+            grapharray.push({x: i, y: i});
         });
+        // var plot = xkcdplot();
+        // plot('graphz');
     }
 }

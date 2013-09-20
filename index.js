@@ -6,6 +6,7 @@ var path = require('path');
 var util = require('util');
 var _ = require('underscore');
 
+
 // Config
 var configFile = 'config/config.json';
 var config;
