@@ -16,10 +16,8 @@ oops.checkPlace = function(lat, lon) {
         url: "/checkPlace",
         data: {lat: lat, lon: lon}
     })
-        .done(function(data) {
-            if (console && console.log) {
-                console.log("Sample of data:", data);
-            }
+        .done(function(result) {
+            L.geoJson(JSON.parse(result[0].geojson)).addTo(map);
         });
 }
 
