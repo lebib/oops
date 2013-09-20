@@ -8,6 +8,7 @@ define = function(jade, cb) {
 var oops = {};
 var currentLayer = null
 var currentPopup = null;
+var plot = null;
 
 oops.loadTemplate = function(name) {
     $("div#content")
@@ -91,24 +92,30 @@ oops.showGraph = function(datas) {
     //console.log(datas);
     var grapharray = [];
     var i = 0;
+    if (plot) { 
+
+        $("#graphz").empty();
+    }
     if (datas) {
         datas.prunes.forEach(function(prune) {
             i++;
             console.log(prune);
             //build array
-            grapharray.push({x: i, y: i});
+            grapharray.push({x: i, y: (i*prune.pid/10000) - i});
         });
-         var plot = xkcdplot();
-         paramz = {
+
+         plot = xkcdplot();
+         var paramz = {
             title: "test",
             xlabel: "derp",
             ylabel: "herp",
-            xlim: [-10, 10],
-            ylim: [-10,10]
+            xlim: [-100, 100],
+            ylim: [-100, 100]
          };
          console.log(grapharray);
+         console.log(paramz);
          plot('#graphz', paramz);
-         plot.plot(grapharray, {stroke: "red"});
+         plot.plot(grapharray, {stroke: "blue"});
          // plot.plot(, {stroke: "red"});
 
         // Render the image.

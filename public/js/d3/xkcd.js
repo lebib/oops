@@ -1,3 +1,6 @@
+// Original Author: Dan Foreman-Mackey http://dan.iel.fm/xkcd/
+// Customized by: Kevin Xu https://github.com/imkevinxu
+
 function xkcdplot() {
 
     // Default parameters.
@@ -10,7 +13,7 @@ function xkcdplot() {
         magnitude = 0.003,
         xlabel = "Time of Day",
         ylabel = "Awesomeness",
-        title = "The most important graph ever made",
+        title = "The Awesome Graph",
         xlim,
         ylim;
 
@@ -23,20 +26,22 @@ function xkcdplot() {
     var elements = [];
 
     // The XKCD object itself.
-    var xkcd = function (nm) {
+    var xkcd = function (nm, param) {
         el = d3.select(nm).append("svg")
                     .attr("width", width + 2 * margin)
                     .attr("height", height + 2 * margin)
                 .append("g")
                     .attr("transform", "translate(" + margin + ", "
                                                     + margin + ")");
-        return xkcd;
-    };
 
-    // Getters and setters.
-    xkcd.xlim = function () {
-        if (!arguments.length) return xlim;
-        xlim = arguments[0];
+        if ("title" in param) title = param["title"];
+        if ("xlabel" in param) xlabel = param["xlabel"];
+        if ("ylabel" in param) ylabel = param["ylabel"];
+        if ("width" in param) width = param["width"];
+        if ("height" in param) height = param["height"];
+        if ("xlim" in param) xlim = param["xlim"];
+        if ("ylim" in param) ylim = param["ylim"];
+
         return xkcd;
     };
 
@@ -97,12 +102,8 @@ function xkcdplot() {
                               .attr("transform", "rotate(-90)")
                               .text(ylabel);
 
-        // And a title.
-        el.append("text").attr("class", "title")
-                              .attr("text-anchor", "end")
-                              .attr("x", width)
-                              .attr("y", 0)
-                              .text(title);
+        // Insert H1 title
+        $("<h1>"+title+"</h1>").insertBefore($(el[0]).parent());
 
         return xkcd;
     };
@@ -120,9 +121,12 @@ function xkcdplot() {
         xlim = xlim || xl;
         xlim[0] = Math.min(xlim[0], xl[0]);
         xlim[1] = Math.max(xlim[1], xl[1]);
+
         ylim = ylim || yl;
         ylim[0] = Math.min(ylim[0], yl[0]);
         ylim[1] = Math.max(ylim[1], yl[1]);
+        ylim[0] = ylim[0] - (ylim[1] - ylim[0]) / 16;
+        ylim[1] = ylim[1] + (ylim[1] - ylim[0]) / 16;
 
         // Add the plotting function.
         elements.push({
