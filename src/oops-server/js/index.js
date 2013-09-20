@@ -19,7 +19,14 @@ exports.init = function(config, cb) {
 
 exports.checkPlace = function(lat, lon, cb) {
     getNearRoad(lat, lon, 8, function(result) {
-        cb(result);
+        if (!result) {
+            cb("No road found found");
+        } else {
+            getPrunes(result, function(err, prunes) {
+                console.log(prunes);
+                cb(err, result);
+            }, 0)
+        }
     })
 }
 
@@ -27,6 +34,35 @@ exports.addPrune = addPrune = function(lat, lon, date, comment, cb) {
     getNearRoad(lat, lon, 1, function(result) {
         addPruneForRoad(result.gid, data, comment, cb);
     })
+}
+
+exports.getPrunes = getPrunes = function(arr, cb, i, ret) {
+    var ret = ret || [];
+    var recursive = false;
+    if (typeof(arr) != 'string') {
+        gid = arr;
+        recursive = true;
+    } else {
+        gid = arr[i].gid;
+    }
+    knex("prunes")
+        .select("*")
+        .where({
+            gid: gid
+        })
+        .then(function(prunes) {
+            if ((i || i === 0) && recursive) {
+                i++;
+                if (i < arr.length) {
+                    ret.push(prunes);
+                    getPrunes(arr, cb, i, ret);
+                } else {
+                    cb(null, ret)
+                }
+            }
+        }, function(err) {
+            cb(err);
+        })
 }
 
 
@@ -58,7 +94,7 @@ exports.injectFakeDatas = function() {
             result.forEach(function(res) {
                 var num = Math.floor((Math.random() * 10) + 1);
                 for (var i = 0; i < num; i++) {
-                    addPruneForRoad(res.gid, "2012-09-"+num, '', function(err) {
+                    addPruneForRoad(res.gid, "2012-09-" + num, '', function(err) {
                         if (err) {
                             console.log("Error creating Prune: " + err);
                         }
