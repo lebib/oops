@@ -1,10 +1,10 @@
 link(type="text/css", rel="stylesheet", href="js/leaflet/leaflet.css")
 script(src="/js/leaflet/leaflet.js")
 script.
-    var map = new L.Map('map', {center: new L.LatLng(43.6100, 3.8742), zoom: 13});
+    var map = new L.Map('map', {center: new L.LatLng(43.6024, 3.87414), zoom: 14});
     var osm = new L.TileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png');
 
-    var pd = new L.marker([43.6100, 3.8742], {draggable: true}).addTo(map);
+    var pd = new L.marker([43.6024, 3.87414], {draggable: true}).addTo(map);
     pd.on('dragend', function(evt) {
         var latlng = this.getLatLng();
             oops.checkPlace(latlng.lat, latlng.lng);
