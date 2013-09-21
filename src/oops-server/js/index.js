@@ -199,15 +199,14 @@ var _getRoadStatFromGid = function(gid, date, cb) {
     total_jour = 0;
     where_dow = 'EXTRACT(DOW FROM prune_date) = ' + dow;
     where_date = 'EXTRACT(EPOCH FROM prune_date) BETWEEN ' + date_left + ' AND ' + date_right;
-    console.log('TEST');
     console.log(knex("prunes")
-		.select(knex.raw('count(1) as total_tranche'))
+		.select(knex.raw('gid, count(1) as total_tranche'))
 		.where(knex.raw(where_dow))
 		.andWhere('gid', '=', gid)
 		.andWhere(function(){
 		    this.whereBetween(knex.raw('EXTRACT(HOUR FROM prune_date)'), [hour, hour + 1])
 		})
-		.groupBy('gid')
+		.groupBy('gid') 
 		.toString()
 	       );
     knex("prunes")
@@ -219,7 +218,7 @@ var _getRoadStatFromGid = function(gid, date, cb) {
            })
         .groupBy('gid')
 	.then(function(result) {
-            console.log('in then');
+           // console.log(result );
 	    /*_concatStats(result, 0, '', function(str) {
 		cb(str);
             })*/
