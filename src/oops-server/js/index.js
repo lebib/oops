@@ -101,7 +101,6 @@ exports.addPruneForRoad = addPruneForRoad = function(roadGid, date, comment, cb)
     }
     comment = comment || '';
     date = date || 'now()';
-    console.log('insert -> ' + date);
     knex("prunes")
         .insert({
             gid: roadGid,
@@ -109,22 +108,31 @@ exports.addPruneForRoad = addPruneForRoad = function(roadGid, date, comment, cb)
             comment: comment
         })
         .then(function() {
-            console.log('done.');
+            console.log('...');
         }, function(err) {
             console.log('rly?');
             cb(err);
         })
 }
 
-
-exports.injectFakeDatas = function() {
+exports.deletePruneTable = deletePruneTable = function() {
+    knex("prunes").truncate().then(function(res) {
+        console.log('truncate done.');
+        injectFakeDatas(); 
+    },function(err) {
+        console.log('SQL Error : ' + err);
+    });
+};
+exports.injectFakeDatas = injectFakeDatas = function() {
     // Get all Roads
-    console.log("Import fake datas");
+    console.log("Import fake dataz");
     knex("opennodata")
         .select('gid')
         .then(function(result) {
             result.forEach(function(res) {
-                for (var i = 0; i < 3; i++) {
+                var max = Math.floor((Math.random() * 100) + 10);
+                console.log('Inserting ' + max + ' prunes to road id ' + res.gid + ' !');
+                for (var i = 0; i < max; i++) {
                     var jour = Math.floor((Math.random() * 29) + 1);
                     var h = Math.floor(Math.random() * 10 + 9);
                     if (h < 10) {
@@ -142,8 +150,8 @@ exports.injectFakeDatas = function() {
                         }
                     });
                 }
-                console.log('fucking done.');
             });
+            console.log('Insertz done.');
         }, function(err) {
             console.log("SQL Error: " + err);
         });
