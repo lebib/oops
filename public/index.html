@@ -8,18 +8,19 @@
 	</script>
 	<link rel="stylesheet" href="/css/oops.css"></link>
 	<link rel="stylesheet" href="/js/jquery-mobile/jquery.mobile-1.3.2.min.css"></link>
+	<link rel="stylesheet" href="/js/leaflet/leaflet.css"></link>
 	<script src="/js/jquery/jquery-1.10.2.min.js"></script>
 	<script src="/js/oops.js"></script>
 	<script src="/js/jquery-mobile/jquery.mobile-1.3.2.min.js"></script>
+	<script src="/js/leaflet/leaflet.js"></script>
+	<script src="/js/ui.js"></script>
 	<script>
-	jQuery(document)
-   	 .ready(function() {
-	    	oops.loadTemplate('index');
-   	 });
+	jQuery(document).ready(function() {
+		oops.initMap();	
+             });
 	</script>
 	<script src="/js/d3/d3.v2.min.js"></script>
 	<script src="/js/d3/xkcd.js"></script>
-	<script src="/js/views/templates.js"></script>
 </head>
 <body>
 	<!-- SPLASH -->
@@ -51,7 +52,9 @@
 			<a href="#home" data-rel="back">Retour</a>
 			<h1>Oops</h1>
 		</div>
-		<div data-role="content", id="content"></div>
+		<div data-role="content">
+			<div id="map"></div>
+		</div>
 		<div data-role="footer"><h1>Le bib</h1></div>
 	</div>
 

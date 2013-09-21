@@ -84,7 +84,7 @@ function initExpress() {
 	});
 	console.log('Server ready');
 }
-oops.deletePruneTable();
+//oops.deletePruneTable();
 
 
 

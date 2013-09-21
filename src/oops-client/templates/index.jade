@@ -1,23 +1,2 @@
-link(type="text/css", rel="stylesheet", href="/js/leaflet/leaflet.css")
-script(src="/js/leaflet/leaflet.js")
-script(src="/js/ui.js")
 
-script.
-    var map = new L.Map('map', {center: new L.LatLng(43.6024, 3.87414), zoom: 14});
-    var osm = new L.TileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png');
-
-    var marker = new L.marker([43.6024, 3.87414], {draggable: true}).addTo(map);
-    marker.on('dragend', function(evt) {
-        var latlng = this.getLatLng();
-            oops.checkPlace(latlng.lat, latlng.lng);
-    });
-    map.addLayer(osm);
-    var popup = L.popup();
     
-div(id="splashmenu", class="screen")
-    a(class="bigbutton", href="#send_data") Envoyer des données
-    a(class="bigbutton", href="#map") Radar à PV
-
-div(id="map", class="screen")
-    
-

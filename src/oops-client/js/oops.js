@@ -7,18 +7,56 @@ var oops = {};
 var currentLayer = null
 var currentPopup = null;
 var plot = null;
+var mapObj;
+var myCoords = {lat: 43.6024, lon: 3.87414};
 
 oops.loadTemplate = function(name) {
-    $("#content").html(tpl(name));
-        $('#content').trigger('create');
+    $("#content")
+        .html(tpl(name));
+    $('#content')
+        .trigger('create');
 }
 
-    $(window).on("pagechange", function(event, ui){
-         if ($.mobile.activePage.attr('id') == 'mappage') {
-             map.invalidateSize(false);
-         }
+oops.initMap = function() {
+    var mapObj = new L.Map('map', {
+        center: new L.LatLng(myCoords.lat, myCoords.lon),
+        zoom: 14
     });
- 
+    var osm = new L.TileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png');
+
+    var marker = new L.marker([myCoords.x, myCoords.y], {
+        draggable: true
+    })
+        .addTo(mapObj);
+    marker.on('dragend', function(evt) {
+        var latlng = this.getLatLng();
+        oops.checkPlace(latlng.lat, latlng.lng);
+    });
+    mapObj.addLayer(osm);
+    var popup = L.popup();
+
+   $(window)
+        .on("pagechange", function(event, ui) {
+            if ($.mobile.activePage.attr('id') == 'mappage') {
+                mapObj.invalidateSize(false);
+            }
+        });
+
+    if(navigator.geolocation)
+        navigator.geolocation.getCurrentPosition(oops.setPosition, onError);
+}
+
+onError = function() {
+    oops.initMap();
+}
+
+oops.setPosition = function (position) {
+    if (position.coords.latitude) {
+        myCoords = {lat: position.coords.latitude, lon: position.coords.longitude}
+    }
+    oops.initMap();
+}
+
 oops.checkPlace = function(lat, lon) {
     $.ajax({
         url: "/checkPlace",
@@ -40,7 +78,7 @@ oops.checkPlace = function(lat, lon) {
                 currentPopup = L.popup();
             }
             if (currentLayer) {
-                map.removeLayer(currentLayer);
+                mapObj.removeLayer(currentLayer);
             }
             result.forEach(function(line) {
                 switch (line.tarif) {
@@ -56,10 +94,10 @@ oops.checkPlace = function(lat, lon) {
                 }
                 if (line.prunes.length) {
                     line.prunes.forEach(function(p) {
-                            var n=p.prune_date.match(/([0-9]+)/g);
-                            var day = n[0]+'/'+n[1]+'/'+n[2];
-                            var hour = n[3]+'h '+n[4] +'min';
-                            prunesList.push('Le '+day+' à '+hour);
+                        var n = p.prune_date.match(/([0-9]+)/g);
+                        var day = n[0] + '/' + n[1] + '/' + n[2];
+                        var hour = n[3] + 'h ' + n[4] + 'min';
+                        prunesList.push('Le ' + day + ' à ' + hour);
                     })
                 }
                 html += prunesList.join("<br />");
@@ -67,13 +105,13 @@ oops.checkPlace = function(lat, lon) {
                 currentLayer = L.geoJson(JSON.parse(line.geojson), {
                     style: style
                 })
-                    .addTo(map);
+                    .addTo(mapObj);
             });
 
             var markerLatLng = marker.getLatLng();
             currentPopup.setLatLng([markerLatLng.lat, markerLatLng.lng]);
             currentPopup.setContent(html);
-            currentPopup.openOn(map);
+            currentPopup.openOn(mapObj);
             oops.getRoadStat(43.6024, 3.87414, '2012-09-10', function(rez) {
                 console.log(" --- TRACE getRoadStat --- ");
                 console.log(rez);
@@ -83,7 +121,7 @@ oops.checkPlace = function(lat, lon) {
 }
 
 oops.getRoadStat = function(lat, lon, date, cb) {
-        $.ajax({
+    $.ajax({
         url: "/getRoadStat",
         data: {
             lat: lat,
@@ -115,31 +153,35 @@ oops.showGraph = function(datas) {
     //console.log(datas);
     var grapharray = [];
     var i = 0;
-    if (plot) { 
+    if (plot) {
 
-        $("#graphz").empty();
+        $("#graphz")
+            .empty();
     }
     if (datas) {
         datas.prunes.forEach(function(prune) {
             i++;
             //console.log(prune);
             //build array
-            grapharray.push({x: i, y: (i*prune.pid/10000) - i});
+            grapharray.push({
+                x: i,
+                y: (i * prune.pid / 10000) - i
+            });
             //console.log(prune.prune_date);
         });
 
-         plot = xkcdplot();
-         var paramz = {
+        plot = xkcdplot();
+        var paramz = {
             title: "test",
             xlabel: "derp",
             ylabel: "herp",
             xlim: [-100, 100],
             ylim: [-100, 100]
-         };
-         // console.log(grapharray);
-         // console.log(paramz);
-         plot('#graphz', paramz);
-         /*
+        };
+        // console.log(grapharray);
+        // console.log(paramz);
+        plot('#graphz', paramz);
+        /*
             TODO GRAPHZ:
             * prunes par heures 
             * % probabilité d'allumage par une pervanche

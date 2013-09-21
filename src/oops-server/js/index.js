@@ -27,7 +27,7 @@ exports.checkPlace = function(lat, lon, date, cb) {
                 if (err) {
                     console.log(err);
                 }
-    
+
                 getNearRacketMachines(result, function(err, racketmachine) {
                     if (err) {
                         console.log(err);
@@ -109,6 +109,7 @@ exports.addPruneForRoad = addPruneForRoad = function(roadGid, date, comment, cb)
         })
         .then(function() {
             console.log('...');
+            cb();
         }, function(err) {
             console.log('rly?');
             cb(err);
@@ -116,45 +117,69 @@ exports.addPruneForRoad = addPruneForRoad = function(roadGid, date, comment, cb)
 }
 
 exports.deletePruneTable = deletePruneTable = function() {
-    knex("prunes").truncate().then(function(res) {
-        console.log('truncate done.');
-        injectFakeDatas(); 
-    },function(err) {
-        console.log('SQL Error : ' + err);
-    });
+    knex("prunes")
+        .truncate()
+        .then(function(res) {
+            console.log('truncate done.');
+            injectFakeDatas();
+        }, function(err) {
+            console.log('SQL Error : ' + err);
+        });
 };
+
 exports.injectFakeDatas = injectFakeDatas = function() {
     // Get all Roads
     console.log("Import fake dataz");
     knex("opennodata")
         .select('gid')
-        .then(function(result) {
-            result.forEach(function(res) {
-                var max = Math.floor((Math.random() * 100) + 10);
-                console.log('Inserting ' + max + ' prunes to road id ' + res.gid + ' !');
-                for (var i = 0; i < max; i++) {
-                    var jour = Math.floor((Math.random() * 29) + 1);
-                    var h = Math.floor(Math.random() * 10 + 9);
-                    if (h < 10) {
-                        h = '0' + h;
-                    }
-                    var min = Math.floor(Math.random() * 60);
-                    if (min < 10) {
-                        min = '0' + min;
-                    }
-                    var heure = h + ':' + min;
-                    // console.log("Data : 2012-09-" + jour + ' ' + heure)
-                    addPruneForRoad(res.gid, "2012-09-" + jour + ' ' + heure + ':00.0000', '', function(err) {
-                        if (err) {
-                            console.log("Error creating Prune: " + err);
-                        }
-                    });
-                }
-            });
+        .then(function(roads) {
             console.log('Insertz done.');
+            generateFakePrunes(roads, 0, function() {
+                console.log("ici");
+            })
         }, function(err) {
             console.log("SQL Error: " + err);
         });
+}
+
+var generateFakePrunes = function(roads, i, cb) {
+    res = roads[i];
+    var max = Math.floor((Math.random() * 100) + 10);
+    console.log('Inserting ' + max + ' prunes to road id ' + res.gid + ' !');
+    i++;
+    if (i < roads.length) {
+        insertFakePrunes(max, 0, function() {
+            generateFakePrunes(roads, i, cb);
+        })
+    } else {
+        cb();
+    }
+}
+
+var insertFakePrunes = function(max, i, cb) {
+    var jour = Math.floor((Math.random() * 29) + 1);
+    var h = Math.floor(Math.random() * 10 + 9);
+    if (h < 10) {
+        h = '0' + h;
+    }
+    var min = Math.floor(Math.random() * 60);
+    if (min < 10) {
+        min = '0' + min;
+    }
+    var heure = h + ':' + min;
+    // console.log("Data : 2012-09-" + jour + ' ' + heure)
+    addPruneForRoad(res.gid, "2012-09-" + jour + ' ' + heure + ':00', '', function(err) {
+        console.log(i+' -- '+max);
+        if (err) {
+            console.log("Error creating Prune: " + err);
+        }
+        if (i < max) {
+            i++;
+            insertFakePrunes(max, i, cb);
+        } else {
+            cb();
+        }
+    });
 }
 
 var getNearRoad = function(lat, lon, limit, cb) {
@@ -200,31 +225,31 @@ var _getRoadStatFromGid = function(gid, date, cb) {
     where_dow = 'EXTRACT(DOW FROM prune_date) = ' + dow;
     where_date = 'EXTRACT(EPOCH FROM prune_date) BETWEEN ' + date_left + ' AND ' + date_right;
     console.log(knex("prunes")
-		.select(knex.raw('gid, count(1) as total_tranche'))
-		.where(knex.raw(where_dow))
-		.andWhere('gid', '=', gid)
-		.andWhere(function(){
-		    this.whereBetween(knex.raw('EXTRACT(HOUR FROM prune_date)'), [hour, hour + 1])
-		})
-		.groupBy('gid') 
-		.toString()
-	       );
+        .select(knex.raw('gid, count(1) as total_tranche'))
+        .where(knex.raw(where_dow))
+        .andWhere('gid', '=', gid)
+        .andWhere(function() {
+            this.whereBetween(knex.raw('EXTRACT(HOUR FROM prune_date)'), [hour, hour + 1])
+        })
+        .groupBy('gid')
+        .toString()
+    );
     knex("prunes")
         .select(knex.raw('count(1) as total_tranche'))
         .where(knex.raw(where_dow))
-	.andWhere('gid', '=', gid)
-           .andWhere(function(){
+        .andWhere('gid', '=', gid)
+        .andWhere(function() {
             this.whereBetween(knex.raw('EXTRACT(HOUR FROM prune_date)'), [hour, hour + 1])
-           })
+        })
         .groupBy('gid')
-	.then(function(result) {
-           // console.log(result );
-	    /*_concatStats(result, 0, '', function(str) {
+        .then(function(result) {
+            // console.log(result );
+            /*_concatStats(result, 0, '', function(str) {
 		cb(str);
             })*/
-	}, function(err) {
+        }, function(err) {
             console.log("_getRoadStatFromGid SQL Error: " + err);
-	});
+        });
     console.log('fuu');
     // console.log(knex("prunes")
     //    .select(knex.raw('count(1) as total_jour'))
@@ -244,15 +269,16 @@ var _concatStats = function(prunes, i, val, cb) {
         .select(knex.raw('count(1) as total_jour'))
         .where(knex.raw(where_dow))
         .andWhere('gid', '=', prunes[i].gid)
-        .groupBy('gid').then(function(result) {
+        .groupBy('gid')
+        .then(function(result) {
             i++;
             if (i < prunes.length) {
-                _concatStats(prunes, i, val+result.toString(), cb);
+                _concatStats(prunes, i, val + result.toString(), cb);
             } else {
                 cb(result);
             }
         }, function(err) {
-               console.log("_concatStats SQL Error: " + err);     
+            console.log("_concatStats SQL Error: " + err);
         })
 
     //cb(total_jour / total_tranche);
@@ -260,7 +286,7 @@ var _concatStats = function(prunes, i, val, cb) {
 
 exports.getRoadStat = getRoadStat = function(lat, lon, date, cb) {
     getNearRoad(lat, lon, 1, function(result) {
-	console.log('here ?');
+        console.log('here ?');
         date = date || new Date();
         date_left = date.getTime() / 1000;
         date_right = date;
