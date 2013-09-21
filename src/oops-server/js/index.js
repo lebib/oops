@@ -27,7 +27,13 @@ exports.checkPlace = function(lat, lon, date, cb) {
                 if (err) {
                     console.log(err);
                 }
-                cb(prunes);
+                getNearRacketMachines(result, function(err, racketmachine) {
+                    if (err) {
+                        console.log(err);
+                    }
+                    prunes.racketmachine = racketmachine;
+                    cb(prunes);
+                });
             }, 0)
         }
     })
@@ -148,6 +154,21 @@ var getNearRoad = function(lat, lon, limit, cb) {
     limit = parseInt(limit) || 1;
     knex("opennodata")
         .select(knex.raw("gid, tarifs2011 as tarif, ST_AsGeoJson(ST_Transform(geom, 4326)) as geojson"))
+        .orderBy(knex.raw("ST_Transform(ST_SetSRID(ST_MakePoint(" + lon + ", " + lat + "), 4326), 2154) <-> geom"))
+        .limit(limit)
+        .then(function(result) {
+            cb(result);
+        }, function(err) {
+            console.log("SQL Error: " + err);
+        });
+}
+
+var getNearRacketMachines = function(lat, lon, limit, cb) {
+    lat = parseFloat(lat);
+    lon = parseFloat(lon);
+    limit = parseInt(limit) || 1;
+    knex("racketmachines")
+        .select(knex.raw("numero, ST_AsGeoJson(ST_Transform(geom, 4326)) as geojson"))
         .orderBy(knex.raw("ST_Transform(ST_SetSRID(ST_MakePoint(" + lon + ", " + lat + "), 4326), 2154) <-> geom"))
         .limit(limit)
         .then(function(result) {

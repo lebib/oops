@@ -35,3 +35,6 @@ Install described for Debian, too lazy so update for your distro.
 
 - Inject fake prunes
 [postgres@biatch oops] psql oops -f resources/sql/fake_prunes.sql
+
+- Inject racketmachine
+[postgres@biatch oops] psql oops -f resources/sql/racketmachines.sql

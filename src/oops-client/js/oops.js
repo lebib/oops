@@ -15,6 +15,7 @@ oops.loadTemplate = function(name) {
         .html(tpl(name));
 }
 
+ 
 oops.checkPlace = function(lat, lon) {
     $.ajax({
         url: "/checkPlace",
