@@ -15,7 +15,7 @@ script.
     map.addLayer(osm);
     var popup = L.popup();
     
-div(data-role="header", data-theme="f", id="header")
+div(data-role="header", id="header")
     #menubar
         #home_button
            a(class="button", href="#splashmenu") Home
@@ -24,14 +24,12 @@ div(data-role="header", data-theme="f", id="header")
 div(data-role="content")
     div(id="splashscreen", class="screen")
         #logo
-            img(src="images/logo_oops.png")
         #progress
 
     div(id="splashmenu", class="screen")
         a(class="bigbutton", href="#send_data") Envoyer des données
         a(class="bigbutton", href="#map") Radar à PV
     div(id="map", class="screen")
-
         
     div(id="graphz", class="screen")
         #graph1
@@ -46,12 +44,12 @@ div(data-role="content")
             ol
               li
                 label(for="PVdate") Date du PV
-                input(name="PVdate", type="date", placeholder="Date du PV")
+                input(name="PVdate", type="date")
               li
                 label(for="PVtime") Heure du PV
-                input(name="PVtime", type="time", placeholder="Heure du PV")
+                input(name="PVtime", type="time")
               input(name="PVgeo", type="hidden", value="")
-              input(type="submit", value="PruneThis !")
+              input(type="submit", value="Envoyer !")
     
     div(id="overlaymsg")
         #closemsg

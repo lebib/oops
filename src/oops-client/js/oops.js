@@ -13,6 +13,7 @@ var plot = null;
 oops.loadTemplate = function(name) {
     $("div#content")
         .html(tpl(name));
+        $('#content').trigger('create');
 }
 
  
