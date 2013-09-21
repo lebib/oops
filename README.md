@@ -32,6 +32,7 @@ Install described for Debian, too lazy so update for your distro.
 [postgres@biatch oops]$  psql  oops -c "ALTER Table opennodata OWNER TO oops;"
 [postgres@biatch oops]$  psql  oops -c "ALTER Table spatial_ref_sys OWNER TO oops;"
 [postgres@biatch oops]$  psql  oops -c "ALTER Table prunes OWNER TO oops;"
+[postgres@biatch oops]$  psql  oops -c "ALTER Table racketmachines OWNER TO oops;"
 
 - Inject fake prunes
 [postgres@biatch oops] psql oops -f resources/sql/fake_prunes.sql
