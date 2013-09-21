@@ -53,8 +53,9 @@ oops.checkPlace = function(lat, lon) {
                 if (line.prunes.length) {
                     line.prunes.forEach(function(p) {
                             var n=p.prune_date.match(/([0-9]+)/g);
+                            console.log(p.prune_date);
                             var day = n[0]+'/'+n[1]+'/'+n[2];
-                            var hour = n[4]+'h '+n[5]+'min';
+                            var hour = n[4]+'h '+n[5] +'min';
                             prunesList.push('Le '+day+' à '+hour);
                     })
                 }
@@ -70,7 +71,7 @@ oops.checkPlace = function(lat, lon) {
             currentPopup.setLatLng([markerLatLng.lat, markerLatLng.lng]);
             currentPopup.setContent(html);
             currentPopup.openOn(map);
-            // TOUDOU : PUT DAT HERE
+            // TOUDOU : PUT DAT HERE (oops undefined)
             // rez = oops.getRoadStat(43.6024, 3.87414);
             // console.log("REZ");
             oops.showGraph(result[0]);
@@ -106,6 +107,7 @@ oops.showGraph = function(datas) {
             console.log(prune);
             //build array
             grapharray.push({x: i, y: (i*prune.pid/10000) - i});
+            console.log(prune.prune_date);
         });
 
          plot = xkcdplot();

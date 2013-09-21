@@ -78,9 +78,11 @@ function initExpress() {
 	});
 	console.log('Server ready');
 }
-// oops.injectFakeDatas();
+oops.injectFakeDatas();
  
-rez = oops.getRoadStat(43.6024, 3.87414);
-console.log(rez); 
+// oops.getRoadStat(43.6024, 3.87414, 1, function(rez){
+// 	console.log(rez);
+// });
+
 
 //console.log('une saloperie'); 

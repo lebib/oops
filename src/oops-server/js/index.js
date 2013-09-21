@@ -86,7 +86,7 @@ exports.addPruneForRoad = addPruneForRoad = function(roadGid, date, comment, cb)
     }
     comment = comment || '';
     date = date || 'now()';
-    console.log(date)
+    console.log('insert -> ' + date);
     knex("prunes")
         .insert({
             gid: roadGid,
@@ -94,8 +94,9 @@ exports.addPruneForRoad = addPruneForRoad = function(roadGid, date, comment, cb)
             comment: comment
         })
         .then(function() {
-
+            console.log('done.');
         }, function(err) {
+            console.log('rly?');
             cb(err);
         })
 }
@@ -108,24 +109,25 @@ exports.injectFakeDatas = function() {
         .select('gid')
         .then(function(result) {
             result.forEach(function(res) {
-                var jour = Math.floor((Math.random() * 29) + 1);
-                var h = Math.floor(Math.random() * 10 + 9);
-                if (h < 10) {
-                    h = '0' + h;
-                } 
-                var min = Math.floor(Math.random() * 60);
-                if (min < 10) {
-                    min = '0' + min;
-                }
-                var heure = h + ':' + min;
-                for (var i = 0; i < jour; i++) {
+                for (var i = 0; i < 3; i++) {
+                    var jour = Math.floor((Math.random() * 29) + 1);
+                    var h = Math.floor(Math.random() * 10 + 9);
+                    if (h < 10) {
+                        h = '0' + h;
+                    } 
+                    var min = Math.floor(Math.random() * 60);
+                    if (min < 10) {
+                        min = '0' + min;
+                    }
+                    var heure = h + ':' + min;
                     // console.log("Data : 2012-09-" + jour + ' ' + heure)
-                    addPruneForRoad(res.gid, "2012-09-" + jour + ' ' + heure, '', function(err) {
+                    addPruneForRoad(res.gid, "2012-09-" + jour + ' ' + heure + ':00.0000', '', function(err) {
                         if (err) {
                             console.log("Error creating Prune: " + err);
                         }
                     });
                 }
+                console.log('fucking done.');
             });
         }, function(err) {
             console.log("SQL Error: " + err);
@@ -149,7 +151,6 @@ var getNearRoad = function(lat, lon, limit, cb) {
 
 exports.getRoadStat = getRoadStat = function(lat, lon, date, cb) {
     getNearRoad(lat, lon, 1, function(result){
-        console.log('1')
         date = date || new Date();
         date_left = date.getTime()/1000;
         date_right = date;
@@ -159,31 +160,44 @@ exports.getRoadStat = getRoadStat = function(lat, lon, date, cb) {
         hour = date.getHours();
         total_tranche = 0;
         total_jour = 0;
-        console.log('2')
-        console.log(knex("prunes")
-           .select(knex.raw('count(1) as total_tranche'))
-           .where(knex.raw('EXTRACT(DOW FROM prune_date)'), '=', dow)
-           .andWhere('gid', '=', result.gid)
-           // .andWhereBetween(knex.raw('EXTRACT(EPOCH FROM prune_date)'), [date_left, date_right])
-           .groupBy('gid')
-           .toString());
-            console.log('cette merde');
-           /*.then(function(result) {
-        total_tranche = result.total_tranche;
+        where_dow = 'EXTRACT(DOW FROM prune_date) = ' + dow;
+        where_date = 'EXTRACT(EPOCH FROM prune_date) BETWEEN ' + date_left + ' AND ' + date_right;
+        knex("prunes")
+           .select(knex.raw('count(1) as total_tranche'))                      
+           .where(knex.raw(where_dow))
+           /*.andWhere('gid', '=', result.gid)
+           .andWhere(function(){
+            this.whereBetween(knex.raw('EXTRACT(EPOCH FROM prune_date)'), [date_left, date_right])
+           })
+           .groupBy('gid')*/
+           /*.toString()); */
+           .then(function(result) {
+                console.log(result);
+                result.forEach(function(res){
+                    knex("prunes")
+                       .select(knex.raw('count(1) as total_jour'))
+                       .where(knex.raw(where_dow))
+                       .andWhere('gid', '=', res.gid)
+                       .groupBy('gid').toString();
+                        console.log(res);
+                        cb(total_jour/total_tranche);
+                        
                     }, function(err) {
-        console.log("SQL Error: " + err);
-           });*/
-        console.log(knex("prunes")
-           .select(knex.raw('count(1) as total_jour'))
-           .where(knex.raw('EXTRACT(DOW FROM prune_date)'), '=', dow)
-           .andWhere('gid', '=', result.gid)
-           .groupBy('gid').toString());
+                        console.log("SQL Error: " + err);
+                   });
+                });
+ 
+        // console.log(knex("prunes")
+        //    .select(knex.raw('count(1) as total_jour'))
+        //    .where(knex.raw(where_dow))
+        //    .andWhere('gid', '=', result.gid)
+        //    .groupBy('gid').toString());
            // .then(function(result) {
            //      total_jour = result.total_jour;
            //          }, function(err) {
            //      console.log("SQL Error: " + err);
            // });
-                cb(total_tranche/total_day);
-            })
+        cb(res);
+    })
 }
 

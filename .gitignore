@@ -4,3 +4,4 @@ config/config.json
 public/css/*
 public/js/oops.js
 public/js/views/*.js
+resources/sql/bibtime.py
