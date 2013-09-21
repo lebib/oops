@@ -22,10 +22,58 @@
 	<script src="/js/views/templates.js"></script>
 </head>
 <body>
-	<div data-role="page" id="page" data-theme="a" data-content-theme="a">
-		<div data-role="header">Oops</div>
-		<div data-role="content", id="oopscontent"></div>
-		<div data-role="footer">Le bib</div>
+	<!-- SPLASH -->
+	<div data-role="page" id="spash" data-theme="a" data-content-theme="a">
+		<div data-role="header">
+			<h1>Oops</h1>
+		</div>
+		<div data-role="content">
+			<a href="#home">Home</a>
+		</div>
+		<div data-role="footer"><h1>Le bib</h1></div>
+	</div>
+
+	<!-- HOME -->
+	<div data-role="page" id="home" data-theme="a" data-content-theme="a">
+		<div data-role="header">
+			<h1>Oops</h1>
+		</div>
+		<div data-role="content">
+			<a href="#mappage" data-role="button" data-transition="slide">Consulter les prunes</a>
+			<a href="#addprunepage" data-role="button" data-rel="dialog" data-transition="pop">Soumettre une pervenche</a>
+		</div>
+		<div data-role="footer"><h1>Le bib</h1></div>
+	</div>
+
+	<!-- MAP -->
+	<div data-role="page" id="mappage" data-theme="a" data-content-theme="a">
+		<div data-role="header">
+			<a href="#home" data-rel="back">Retour</a>
+			<h1>Oops</h1>
+		</div>
+		<div data-role="content", id="content"></div>
+		<div data-role="footer"><h1>Le bib</h1></div>
+	</div>
+
+	<!-- ADD -->
+	<div data-role="page" id="addprunepage" data-theme="a" data-content-theme="a">
+		<div data-role="header">
+			<a href="#home" data-rel="back">Retour</a>
+			<h1>Oops</h1>
+		</div>
+		<div data-role="content">
+			<ul>
+				<li>
+					<label for="date"> Date de la prune
+					<input type="date" id="pvdate">
+				</li>
+				<li>
+					<label for="date"> Heure de la prune
+					<input type="date" id="pvhour">
+				</li>
+			</ul>		       	 
+		</div>
+		<div data-role="footer"><h1>Le bib</h1></div>
 	</div>
 </body>
 </html>
