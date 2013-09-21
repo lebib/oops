@@ -58,6 +58,12 @@ function initExpress() {
 		});
 	});
 
+	app.get('/getRoadStat', function(req, res) {
+		oops.getRoadStat(req.query.lat, req.query.lon, req.query.date, function(result) {
+			res.json(req, result);
+		});
+	});
+
 	app.post('/addPrune', function(req, res) {
 		oops.addPrune(req.query.lat, req.query.lon, req.query.date, req.query.comment, function(result) {
 			res.json(req, result);
@@ -68,7 +74,7 @@ function initExpress() {
 	var server = app.listen(config.server.port);
 	var io = require('socket.io')
 		.listen(server);
-		io.sockets.on('connection', function(socket) {
+	io.sockets.on('connection', function(socket) {
 		socket.emit('connected', socket.id);
 		sockets[socket.id] = socket;
 		console.log('A socket connected: ' + socket.id);
@@ -79,10 +85,7 @@ function initExpress() {
 	console.log('Server ready');
 }
 //oops.injectFakeDatas();
- 
-// oops.getRoadStat(43.6024, 3.87414, 1, function(rez){
-// 	console.log(rez);
-// });
 
 
-//console.log('une saloperie'); 
+
+//console.log('une saloperie');
