@@ -80,7 +80,7 @@ oops.checkPlace = function(lat, lon) {
 
 oops.getRoadStat = function(lat, lon, date, cb) {
         $.ajax({
-        url: "/checkPlace",
+        url: "/getRoadStat",
         data: {
             lat: lat,
             lon: lon,
