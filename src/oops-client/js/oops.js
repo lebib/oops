@@ -42,11 +42,10 @@ oops.initMap = function() {
             }
         });
 
-    if(navigator.geolocation)
-        navigator.geolocation.getCurrentPosition(oops.setPosition, onError);
 }
 
-onError = function() {
+onError = function(error) {
+    console.log("Error setting map position: "+error);
     oops.initMap();
 }
 

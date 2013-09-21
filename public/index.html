@@ -16,8 +16,10 @@
 	<script src="/js/ui.js"></script>
 	<script>
 	jQuery(document).ready(function() {
-		oops.initMap();	
-             });
+	  	if(navigator.geolocation) {
+		        navigator.geolocation.getCurrentPosition(oops.setPosition, onError);             
+	  	}
+  	});
 	</script>
 	<script src="/js/d3/d3.v2.min.js"></script>
 	<script src="/js/d3/xkcd.js"></script>
@@ -40,7 +42,7 @@
 			<h1>Oops</h1>
 		</div>
 		<div data-role="content">
-			<a href="#mappage" data-role="button" data-transition="slide">Consulter les prunes</a>
+			<a href="#mappage" data-role="button" data-transition="slide">Traces de prune</a>
 			<a href="#addprunepage" data-role="button" data-rel="dialog" data-transition="pop">Soumettre une pervenche</a>
 		</div>
 		<div data-role="footer"><h1>Le bib</h1></div>
