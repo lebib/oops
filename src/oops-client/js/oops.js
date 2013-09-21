@@ -70,6 +70,9 @@ oops.checkPlace = function(lat, lon) {
             currentPopup.setLatLng([markerLatLng.lat, markerLatLng.lng]);
             currentPopup.setContent(html);
             currentPopup.openOn(map);
+            // TOUDOU : PUT DAT HERE
+            // rez = oops.getRoadStat(43.6024, 3.87414);
+            // console.log("REZ");
             oops.showGraph(result[0]);
         });
 }

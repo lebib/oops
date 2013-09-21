@@ -68,7 +68,7 @@ function initExpress() {
 	var server = app.listen(config.server.port);
 	var io = require('socket.io')
 		.listen(server);
-	io.sockets.on('connection', function(socket) {
+		io.sockets.on('connection', function(socket) {
 		socket.emit('connected', socket.id);
 		sockets[socket.id] = socket;
 		console.log('A socket connected: ' + socket.id);
@@ -78,3 +78,9 @@ function initExpress() {
 	});
 	console.log('Server ready');
 }
+// oops.injectFakeDatas();
+ 
+rez = oops.getRoadStat(43.6024, 3.87414);
+console.log(rez); 
+
+//console.log('une saloperie'); 

@@ -1,3 +1,4 @@
+
 link(type="text/css", rel="stylesheet", href="/js/leaflet/leaflet.css")
 script(src="/js/leaflet/leaflet.js")
 
@@ -14,12 +15,40 @@ script.
     map.addLayer(osm);
     var popup = L.popup();
     exports.injectFakeDatas();
-div(data-role="header",  data-theme="f")
-    div Oops
+    
+div(data-role="header", data-theme="f", id="header")
+    #menubar
+        #home_button
+           a(class="button", href="#splashmenu") Home
+    #menu
+
 div(data-role="content")
-    #map
-    #graphz
+    div(id="splashscreen", class="screen")
+        #logo
+        #progress
+
+    div(id="splashmenu", class="screen")
+        a(class="bigbutton", href="#send_data") Envoyer des données
+        a(class="bigbutton", href="#map") Radar à PV
+    div(id="map", class="screen")
+
+        
+    div(id="graphz", class="screen")
         #graph1
         #graph2
         #graph3
         #graph4
+    
+    div(id="send_data", class="screen")
+      form(method="POST", action="http://pastafarail.me/foo/bar")
+        fieldset
+          legend
+            ol
+              li
+                label(for="PVtime") Heure du PV
+                input(name="PVtime", type="time", placeholder="Heure du PV")
+              li
+                label(for="PVdate") Heure du PV
+                input(name="PVdate", type="date", placeholder="Date du PV")
+              input(name="PVgeo", type="hidden", value="")
+              input(type="submit", value="Envoyer !")

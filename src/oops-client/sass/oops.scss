@@ -4,9 +4,27 @@ $default-text-shadow-v-offset: 1px;
 @import "compass/reset";
 @import "compass";
 
+/* General classes format */
+.screen {
+	height: 100%;
+	width: 100%;
+}
+
+#splashscreen, #splashmenu, #graphz, #send_data {
+	
+}
+
+/* Splashscreen format */
+.bigbutton {
+
+}
+
+
+/* Map format */
+
 #map { 
-    height: 380px; 
-    width: 550px; 
+    height: 500px; 
+    width: 300px;
 }
 
 .popupTitle {
@@ -22,6 +40,10 @@ $default-text-shadow-v-offset: 1px;
     src: url('../fonts/Humor-Sans.ttf');
 }
 #graphz {
-	height: 250px;
-	width: 500px;
+/*	height: 250px;*/
+	/*width: 100%;*/
 }
+
+/* Send data screen format */
+
+
