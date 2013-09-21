@@ -10,12 +10,12 @@ var currentLayer = null
 var currentPopup = null;
 var plot = null;
 
-
 oops.loadTemplate = function(name) {
     $("div#content")
         .html(tpl(name));
 }
 
+ 
 oops.checkPlace = function(lat, lon) {
     $.ajax({
         url: "/checkPlace",
@@ -25,6 +25,7 @@ oops.checkPlace = function(lat, lon) {
         }
     })
         .done(function(result) {
+            console.log(result);
             var prunesList = [];
             var html = '<div class="popupTitle">Contraventions relevées dans cette rue</div>';
             var style = {
@@ -121,7 +122,7 @@ oops.showGraph = function(datas) {
             //console.log(prune);
             //build array
             grapharray.push({x: i, y: (i*prune.pid/10000) - i});
-            console.log(prune.prune_date);
+            //console.log(prune.prune_date);
         });
 
          plot = xkcdplot();

@@ -53,7 +53,7 @@ function initExpress() {
 	});
 
 	app.get('/checkPlace', function(req, res) {
-		oops.checkPlace(req.query.lat, req.query.lon, function(result) {
+		oops.checkPlace(req.query.lat, req.query.lon, req.query.date, function(result) {
 			res.json(req, result);
 		});
 	});
