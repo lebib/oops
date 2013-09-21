@@ -24,7 +24,7 @@ oops.initMap = function() {
     });
     var osm = new L.TileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png');
 
-    var marker = new L.marker([myCoords.x, myCoords.y], {
+    var marker = new L.marker([myCoords.lat, myCoords.lon], {
         draggable: true
     })
         .addTo(mapObj);
