@@ -73,8 +73,8 @@ exports.getPrunes = getPrunes = function(arr, date, cb, i, ret) {
                 ret[i].prunes = prunes;
                 ret[i].tarif = tarif;
                 _getRoadStatFromGid(gid, date, function(stats) {
-		    console.log('noooooooooo');
-                    console.log(stats);
+                    console.log('Da statz below :');
+		    console.log(stats);
 		    ret[i].stats = stats;
                     i++;
                     if (i < arr.length) {
@@ -259,6 +259,7 @@ var _getTotalJour = function(total_tranche,gid,where_dow,cb){
 	}, function(err) {
 	    console.log("_getTotalJour SQL Error: " + err);
 	});    
+<<<<<<< HEAD
 }
 
 var _concatStats = function(prunes, i, val, cb) {
@@ -334,4 +335,6 @@ exports.getRoadStat = getRoadStat = function(lat, lon, date, cb) {
         // });
         cb(res);
     })
+=======
+>>>>>>> 43cbaa54b64f16f5908fc7b3a9026f79a4482662
 }
