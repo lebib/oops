@@ -88,31 +88,6 @@ oops.addPrune = function(lat, lon) {
             }
         });
 }
-oops.injectFakeDataz = function() {
-    // Get all Roads
-    console.log("Import fake dataz");
-    knex("opennodata")
-        .select('gid')
-        .then(function(result) {
-            result.forEach(function(res) {
-                var jour = Math.floor((Math.random() * 29) + 1);
-                var h = Math.floor(Math.random() * 10 + 9); 
-                var min = Math.floor(Math.random() * 60);
-                var heure = h + ':' + min
-                h = heure + ":" + min;
-                for (var i = 0; i < jour; i++) {
-                    console.log("2012-09-" + jour + ' ' + heure)
-                    // addPruneForRoad(res.gid, "2012-09-" + jour + ' ' + heure, '', function(err) {
-                    //     if (err) {
-                    //         console.log("Error creating Prune: " + err);
-                    //     }
-                    // });
-                }
-            });
-        }, function(err) {
-            console.log("SQL Error: " + err);
-        });
-}
 
 oops.showGraph = function(datas) {
     //console.log(datas);
@@ -141,7 +116,6 @@ oops.showGraph = function(datas) {
          // console.log(grapharray);
          // console.log(paramz);
          plot('#graphz', paramz);
-         oops.injectFakeDataz();
          /*
             TODO GRAPHZ:
             * prunes par heures 
