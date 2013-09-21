@@ -259,7 +259,6 @@ var _getTotalJour = function(total_tranche,gid,where_dow,cb){
 	}, function(err) {
 	    console.log("_getTotalJour SQL Error: " + err);
 	});    
-<<<<<<< HEAD
 }
 
 var _concatStats = function(prunes, i, val, cb) {
@@ -335,6 +334,4 @@ exports.getRoadStat = getRoadStat = function(lat, lon, date, cb) {
         // });
         cb(res);
     })
-=======
->>>>>>> 43cbaa54b64f16f5908fc7b3a9026f79a4482662
 }
