@@ -1,29 +1,33 @@
-$default-text-shadow-color: rgba(gray, 0.6);
-$default-text-shadow-blur: 3px;
-$default-text-shadow-v-offset: 1px;
+/*$default-text-shadow-color: rgba(gray, 0.6);*/
+/*$default-text-shadow-blur: 3px;*/
+/*$default-text-shadow-v-offset: 0.2em;*/
+/*$default-text-shadow-h-offset: 0.2em;*/
+
 @import "compass/reset";
 @import "compass";
 
 /* General classes format */
 .screen {
-	height: 100%;
-	width: 100%;
+	/*height: 100%;*/
+	/*width: 100%;*/
 }
 
 #splashscreen, #splashmenu, #graphz, #send_data {
+	/*color:#FEFEFE;*/
+}
+
+/* Splashmenu format */
+.bigbutton {
 	
 }
 
-/* Splashscreen format */
-.bigbutton {
-
-}
+/* LOGO screen */
 
 
 /* Map format */
 
 #map { 
-    height: 300px; 
+    height: 600px; 
     width: 100%;
 }
 
@@ -39,12 +43,97 @@ $default-text-shadow-v-offset: 1px;
     font-family: "xkcd";
     src: url('../fonts/Humor-Sans.ttf');
 }
-#graphz {
+#graphz .screen {
 	height: 250px;
 	width: 100%;
 }
 
+/*svg {*/
+/*	width:50px;*/
+/*}*/
+
 /* Send data screen format */
+#send-data {
+	/*
+	background:#FF6600;*/
+	background-image: -webkit-linear-gradient(bottom, rgb(89,91,92) 14%, rgb(38,38,38) 79%);
+	padding:15px;
+	font-size: 18px;
+}
+
+#send-data li label{
+	display:block;
+	color:#FEFEFE;
+	margin:0 0 10px 0;
+	font-size:20px;
+}
+
+#send-data form input[type="date"] {
+	font-size: 25px;
+	border-radius:8px;
+	margin:0 0 15px 0;
+	border:1px solid #666;
+	padding:5px;
+	background-image: -webkit-linear-gradient(top, rgb(71,71,71) 14%, rgb(140,140,140) 71%);
+}
+#send-data form input[type="time"] {
+	font-size:25px;
+	border-radius:8px;
+	margin: 0 0 15px 0;
+	border:1px solid #666;
+	padding:3px 5px;
+	background-image: -webkit-linear-gradient(top, rgb(71,71,71) 14%, rgb(140,140,140) 71%);
+}
+#send-data form input[type="date"]:active {
+	font-size: 25px;
+	border-radius:8px;
+	margin:0 0 15px 0;
+	border:1px solid #666;
+	padding:5px;
+	background: #000;
+	color:#FF6600;
+}
+#send-data form input[type="time"]:active {
+	font-size:25px;
+	border-radius:8px;
+	margin: 0 0 15px 0;
+	border:1px solid #666;
+	padding:3px 5px;
+	background: #000;
+	color:#FF6600;
+}
+
+#send-data form input[type="submit"] {
+	font-size:35px;
+	border-radius:8px;
+	margin: 10px 0 15px 0;
+	border:1px solid #666;
+	background:#FAFAFA;
+	padding:10px;
+	color:#FF6600;
+	background-image: -webkit-linear-gradient(top, rgb(71,71,71) 14%, rgb(140,140,140) 71%);
+}
+#send-data form input[type="submit"] {
+	font-size:35px;
+	border-radius:8px;
+	margin: 10px 0 15px 0;
+	border:1px solid #666;
+	background:#FAFAFA;
+	padding:10px;
+	color:#FFF;
+	background-image: -webkit-linear-gradient(top, rgb(71,71,71) 14%, rgb(140,140,140) 71%);
+}
+#send-data form input[type="submit"]:active {
+	font-size:35px;
+	border-radius:8px;
+	margin: 10px 0 15px 0;
+	border:1px solid #666;
+	background:#FAFAFA;
+	padding:10px;
+	color:#FF6600;
+	background: -#000;
+}
+
 
 /* Overlay message box */
 
