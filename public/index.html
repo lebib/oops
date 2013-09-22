@@ -26,14 +26,17 @@
 </head>
 <body>
 	<!-- SPLASH -->
-	<div data-role="page" id="spash" data-theme="a" data-content-theme="a">
+	<div data-role="page" id="splashpage" data-theme="a" data-content-theme="a">
 		<div data-role="header">
 			<h1>Oops</h1>
 		</div>
 		<div data-role="content">
-			<a href="#home">Home</a>
+			<div id="splash">
+				<a href="#home"  data-transition="slide"><img id="splashimg" src="/images/splash.png" alt="Track prune"></img></a>
+				<div class="title">Original Open Pervenche Statistics</div>
+			</div>
+			<div class="caption">Édition Montpellier Agglo</div>
 		</div>
-		<div data-role="footer"><h1>Le bib</h1></div>
 	</div>
 
 	<!-- HOME -->
@@ -42,11 +45,14 @@
 			<h1>Oops</h1>
 		</div>
 		<div data-role="content">
-			<a href="#mappage" data-role="button" data-transition="slide">Traces de prune</a>
-			<a href="#addprunepage" data-role="button" data-rel="dialog" data-transition="pop">Soumettre une pervenche</a>
+			<div class="track_prune">
+				<a href="#mappage"  data-transition="slide"><img src="/images/track_prune.png" alt="Track prune"></img></a>
+			</div>
+			<div class="scan_prune">
+				<a href="#addprunepage"  data-rel="dialog" data-transition="pop"><img src="/images/scan_prune.png" alt="Track prune"></img></a>
+			</div>
 			<a href="#graphzpage" data-role="button" data-transition="slide">Tracer des prunes</a>
 		</div>
-		<div data-role="footer"><h1>Le bib</h1></div>
 	</div>
 
 	<!-- MAP -->
@@ -58,7 +64,6 @@
 		<div data-role="content" id="mapcontent">
 			<div id="map"></div>
 		</div>
-		<div data-role="footer"><h1>Le bib</h1></div>
 	</div>
 
 	<!-- ADD -->
@@ -79,7 +84,6 @@
 				</li>
 			</ul>		       	 
 		</div>
-		<div data-role="footer"><h1>Le bib</h1></div>
 	</div>
 	<div data-role="page" id="graphzpage" data-theme="a" data-content-theme="a">
 		<div data-role="header">
@@ -90,35 +94,44 @@
 			<div id='graphz' data-role="page" data-theme="a" data-content-theme="a">
 				<p>heya!</p>
 				<script>
-					function f1 (x) {
-					    return Math.exp(-0.5 * (x - 1) * (x - 1)) * Math.sin(x + 0.2) + 0.05;
-					}
+					$(window).ready(function() {
+						function f1 (x) {
+						    return Math.exp(-0.5 * (x - 1) * (x - 1)) * Math.sin(x + 0.2) + 0.05;
+						}
 
-					function f2 (x) {
-					    return 0.5 * Math.cos(x - 0.5) + 0.1;
-					}
+						function f2 (x) {
+						    return 0.5 * Math.cos(x - 0.5) + 0.1;
+						}
 
-					var xmin = -1.0,
-					    xmax = 7,
-					    N = 100,
-					    data = d3.range(xmin, xmax, (xmax - xmin) / N).map(function (d) {
-					        return {x: d, y: f1(d)};
-					    })
-					    data2 = d3.range(xmin, xmax, (xmax - xmin) / N).map(function (d) {
-					        return {x: d, y: f2(d)};
-					    });
+						var xmin = -1.0,
+						    xmax = 7,
+						    N = 100,
+						    data = d3.range(xmin, xmax, (xmax - xmin) / N).map(function (d) {
+						        return {x: d, y: f1(d)};
+						    })
+						    data2 = d3.range(xmin, xmax, (xmax - xmin) / N).map(function (d) {
+						        return {x: d, y: f2(d)};
+						    });
 
-					// Build the plot.
-					var plot = xkcdplot();
-					plot("graph1");
+						// Build the plot.
+						var plot2 = xkcdplot();
+						        var paramz = {
+           							 title: "test",
+            							xlabel: "derp",
+            							ylabel: "herp",
+          							  xlim: [-100, 100],
+   							         ylim: [-100, 100]
+ 							       };
+						plot2("#graph1", paramz);
 
-					// Add the lines.
-					plot.plot(data);
-					plot.plot(data2, {stroke: "red"});
+						// Add the lines.
+						plot2.plot(data);
+						plot2.plot(data2, {stroke: "red"});
 
-					// Render the image.
-					plot.xlim([-1.5, 7.5]).draw();
-		    	</script>
+						// Render the image.
+						plot2.draw();
+					})
+		   	 	</script>
 				<!--
 					* % de chance de prune
 					* nb prune / heure général

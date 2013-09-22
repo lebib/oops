@@ -21,7 +21,7 @@ oops.loadTemplate = function(name) {
 oops.initMap = function() {
     mapObj = new L.Map('map', {
         center: new L.LatLng(myCoords.lat, myCoords.lon),
-        zoom: 14
+        zoom: 18
     });
     var osm = new L.TileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png');
 
@@ -39,7 +39,7 @@ oops.initMap = function() {
    $(window)
         .on("pagechange", function(event, ui) {
             if ($.mobile.activePage.attr('id') == 'mappage') {
-                $('#map').height($(window).height() - 117);
+                $('#map').height($(window).height() - 43);
                 console.log($('#map').height());
                 mapObj.invalidateSize(false);
             }

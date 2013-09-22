@@ -14,3 +14,62 @@
     font-family: "xkcd";
     src: url('../fonts/Humor-Sans.ttf');
 }
+
+@font-face {
+    font-family: "Mont";
+    src: url('../fonts/Montserrat-Regular.ttf');
+}
+
+@font-face {
+    font-family: "MontBold";
+    src: url('../fonts/Montserrat-Bold.ttf');
+}
+
+.track_prune {
+	width: 447px;
+	margin: 30px auto 60px auto;
+	padding-left: 90px;
+}
+
+.scan_prune {
+	width: 292px;
+	margin: 0 auto;
+}
+
+.ui-content {
+	padding: 0px!important;
+}
+
+#splash {
+	width: 100%;
+	background: #e1e1e1;
+	margin:  0 auto;
+	padding-top: 20px;
+	text-align: center;
+	margin-top: 20%;
+	text-shadow: none;
+	.title {
+		font-family: Mont;
+		padding: 15px 0;
+		font-size: 24px;
+		color: #000000;
+		width: 100%;
+		text-align: center;
+		word-spacing: 10px;
+	}
+}
+
+#splashpage .caption {
+	padding: 20px 0;
+	font-family: MontBold;
+	color: #757575;
+	width: 100%;
+	text-align: center;
+	text-shadow: none;
+	font-size: 20px;
+}
+
+#splashimg {
+	width: 362px;
+	margin: 0 auto;
+}
