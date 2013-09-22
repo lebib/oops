@@ -242,7 +242,7 @@ var _getTotalJour = function(total_tranche, gid, where_dow, cb) {
             console.log(result[0].total_jour);
 	    ratio = (total_tranche / total_jour);
 	    indice = (total_jour / 100)*5;
-            statz = [ratio, indice];
+            statz = [ratio, indice]
 	    cb(statz);
         }, function(err) {
             console.log("_getTotalJour SQL Error: " + err);
@@ -267,8 +267,9 @@ var _iterateChartDataz = function(chartDataz, date, i, gid, cb){
 	date.setHours(i);
 	console.log(date);
 	_getRoadStatFromGid(gid, date, function(rez){
+	    console.log(rez);
 	    if(rez){
-		chartDataz.push([i,rez]);
+		chartDataz.push([i, rez[0]]);
 	    }
 	    i++;
 	    _iterateChartDataz(chartDataz, date, i, gid, cb);
