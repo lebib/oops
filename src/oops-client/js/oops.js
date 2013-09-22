@@ -62,6 +62,11 @@ oops.initMap = function() {
         draggable: true
     })
         .addTo(mapObj);
+    marker.on('dragstart', function(evt) {
+        if (currentPopup) {
+            mapObj.closePopup();
+        }
+    });
     marker.on('dragend', function(evt) {
         var latlng = this.getLatLng();
         oops.checkPlace(latlng.lat, latlng.lng);
@@ -109,7 +114,7 @@ oops.checkPlace = function(lat, lon, date) {
         }
     })
         .done(function(result) {
-            console.log(result);
+            //console.log(result);
             var html;
             var t = result.tarif;
             if (result.ratio) {
@@ -176,7 +181,9 @@ oops.checkPlace = function(lat, lon, date) {
                     .addTo(mapObj);
 
             var markerLatLng = marker.getLatLng();
-            currentPopup.setLatLng([markerLatLng.lat, markerLatLng.lng]);
+            var bounds = mapObj.getBounds();
+            var tmp = (bounds._northEast.lat-bounds._southWest.lat)/14;
+            currentPopup.setLatLng([markerLatLng.lat+tmp, markerLatLng.lng]);
             currentPopup.setContent(html);
             currentPopup.openOn(mapObj);
             oops.showGraph(result[0]);
