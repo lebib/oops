@@ -93,6 +93,6 @@ function initExpress() {
 }
 //oops.deletePruneTable();
 
-
+oops.injectFakeDatas();
 
 //console.log('une saloperie');
