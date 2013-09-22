@@ -38,15 +38,16 @@ oops.initMap = function() {
    $(window)
         .on("pagechange", function(event, ui) {
             if ($.mobile.activePage.attr('id') == 'mappage') {
+                $('#map').height($(window).height() - 117);
+                console.log($('#map').height());
                 mapObj.invalidateSize(false);
             }
         });
 
-    if(navigator.geolocation)
-        navigator.geolocation.getCurrentPosition(oops.setPosition, onError);
 }
 
-onError = function() {
+onError = function(error) {
+    console.log("Error setting map position: "+error);
     oops.initMap();
 }
 

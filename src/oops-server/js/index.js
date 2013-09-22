@@ -229,7 +229,6 @@ var _getRoadStatFromGid = function(gid, date, cb) {
     where_dow = 'EXTRACT(DOW FROM prune_date) = ' + dow;
     where_hour = 'EXTRACT(HOUR FROM prune_date) = ' + hour;
     where_date = 'EXTRACT(EPOCH FROM prune_date) BETWEEN ' + date_left + ' AND ' + date_right;
-
     knex("prunes")
         .select(knex.raw('count(1) as total_tranche'))
         .where(knex.raw(where_dow))
@@ -266,4 +265,79 @@ var _getTotalJour = function(total_tranche,gid,where_dow,cb){
 	}, function(err) {
 	    console.log("_getTotalJour SQL Error: " + err);
 	});    
+}
+
+var _concatStats = function(prunes, i, val, cb) {
+
+    knex("prunes")
+        .select(knex.raw('count(1) as total_jour'))
+        .where(knex.raw(where_dow))
+        .andWhere('gid', '=', prunes[i].gid)
+        .groupBy('gid')
+        .then(function(result) {
+            i++;
+            if (i < prunes.length) {
+                _concatStats(prunes, i, val + result.toString(), cb);
+            } else {
+                cb(result);
+            }
+        }, function(err) {
+            console.log("_concatStats SQL Error: " + err);
+        })
+
+    //cb(total_jour / total_tranche);
+}
+
+exports.getRoadStat = getRoadStat = function(lat, lon, date, cb) {
+    getNearRoad(lat, lon, 1, function(result) {
+        console.log('here ?');
+        date = date || new Date();
+        date_left = date.getTime() / 1000;
+        date_right = date;
+        date_right.setHours(date.getHours() + 1);
+        date_right = date_right.getTime() / 1000;
+        dow = date.getDay() + 1;
+        hour = date.getHours();
+        total_tranche = 0;
+        total_jour = 0;
+        where_dow = 'EXTRACT(DOW FROM prune_date) = ' + dow;
+        where_date = 'EXTRACT(EPOCH FROM prune_date) BETWEEN ' + date_left + ' AND ' + date_right;
+        knex("prunes")
+            .select(knex.raw('count(1) as total_tranche'))
+            .where(knex.raw(where_dow))
+        /*.andWhere('gid', '=', result.gid)
+           .andWhere(function(){
+            this.whereBetween(knex.raw('EXTRACT(EPOCH FROM prune_date)'), [date_left, date_right])
+           })
+           .groupBy('gid')*/
+        /*.toString()); */
+        .then(function(result) {
+            console.log(result);
+            result.forEach(function(res) {
+                knex("prunes")
+                    .select(knex.raw('count(1) as total_jour'))
+                    .where(knex.raw(where_dow))
+                    .andWhere('gid', '=', res.gid)
+                    .groupBy('gid')
+                    .toString();
+                console.log(res);
+                cb(total_jour / total_tranche);
+
+            }, function(err) {
+                console.log("SQL Error: " + err);
+            });
+        });
+
+        // console.log(knex("prunes")
+        //    .select(knex.raw('count(1) as total_jour'))
+        //    .where(knex.raw(where_dow))
+        //    .andWhere('gid', '=', result.gid)
+        //    .groupBy('gid').toString());
+        // .then(function(result) {
+        //      total_jour = result.total_jour;
+        //          }, function(err) {
+        //      console.log("SQL Error: " + err);
+        // });
+        cb(res);
+    })
 }
