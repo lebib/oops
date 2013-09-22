@@ -49,7 +49,7 @@ exports.getPlaceInfoz = getPlaceInfoz = function(arr, date, cb) {
     var gid = null;
     var geojson = null;
     if (typeof(arr) == 'string') {
-	console.log('oh');
+        console.log('oh');
         gid = arr.gid;
         geojson = arr.geojson;
         tarif = arr.tarif;
@@ -63,7 +63,7 @@ exports.getPlaceInfoz = getPlaceInfoz = function(arr, date, cb) {
     ret.tarif = tarif;
     _getRoadStatFromGid(gid, date, function(stats) {
         console.log('Da statz below :');
-	console.log(stats);
+        console.log(stats);
         ret.ratio = stats[0];
         ret.indice = stats[1];
         cb(ret);
@@ -240,41 +240,41 @@ var _getTotalJour = function(total_tranche, gid, where_dow, cb) {
             total_jour = result[0].total_jour;
             console.log('total_jour below :');
             console.log(result[0].total_jour);
-	    ratio = (total_tranche / total_jour);
-	    indice = (total_jour / 100)*5;
+            ratio = (total_tranche / total_jour);
+            indice = (total_jour / 100) * 5;
             statz = [ratio, indice]
-	    cb(statz);
+            cb(statz);
         }, function(err) {
             console.log("_getTotalJour SQL Error: " + err);
         });
 }
 
-exports.getChartDataz = getChartData = function(lat, lon, date, cb){
+exports.getChartDataz = getChartData = function(lat, lon, date, cb) {
     console.log(lat);
     console.log(lon);
     var chartDataz = [];
     date = date || new Date();
 
-    getNearRoad(lat, lon, 1, function(result) {    
-	gid = result[0].gid;
-	_iterateChartDataz(chartDataz, date, 9, gid, cb);
+    getNearRoad(lat, lon, 1, function(result) {
+        gid = result[0].gid;
+        _iterateChartDataz(chartDataz, date, 9, gid, cb);
     })
 }
 
-var _iterateChartDataz = function(chartDataz, date, i, gid, cb){
-	console.log(gid);
-    if(i<19){
-	date.setHours(i);
-	console.log(date);
-	_getRoadStatFromGid(gid, date, function(rez){
-	    console.log(rez);
-	    if(rez){
-		chartDataz.push([i, rez[0]]);
-	    }
-	    i++;
-	    _iterateChartDataz(chartDataz, date, i, gid, cb);
-	})
-    }else {
-	cb(chartDataz);
+var _iterateChartDataz = function(chartDataz, date, i, gid, cb) {
+    console.log(gid);
+    if (i < 19) {
+        date.setHours(i);
+        console.log(date);
+        _getRoadStatFromGid(gid, date, function(rez) {
+            console.log(rez);
+            if (rez) {
+                chartDataz.push([i, rez[0]]);
+            }
+            i++;
+            _iterateChartDataz(chartDataz, date, i, gid, cb);
+        })
+    } else {
+        cb(chartDataz);
     }
 }
