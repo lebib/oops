@@ -9,6 +9,7 @@ var currentPopup = null;
 var plot = null;
 var mapObj;
 var myCoords = {lat: 43.6024, lon: 3.87414};
+var marker;
 
 oops.loadTemplate = function(name) {
     $("#content")
@@ -18,13 +19,13 @@ oops.loadTemplate = function(name) {
 }
 
 oops.initMap = function() {
-    var mapObj = new L.Map('map', {
+    mapObj = new L.Map('map', {
         center: new L.LatLng(myCoords.lat, myCoords.lon),
         zoom: 14
     });
     var osm = new L.TileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png');
 
-    var marker = new L.marker([myCoords.lat, myCoords.lon], {
+    marker = new L.marker([myCoords.lat, myCoords.lon], {
         draggable: true
     })
         .addTo(mapObj);
@@ -127,10 +128,6 @@ oops.checkPlace = function(lat, lon, date) {
             currentPopup.setLatLng([markerLatLng.lat, markerLatLng.lng]);
             currentPopup.setContent(html);
             currentPopup.openOn(mapObj);
-            oops.getRoadStat(43.6024, 3.87414, '2012-09-10', function(rez) {
-                console.log(" --- TRACE getRoadStat --- ");
-                console.log(rez);
-            });
             oops.showGraph(result[0]);
         });
 }
