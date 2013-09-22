@@ -44,6 +44,7 @@
 		<div data-role="content">
 			<a href="#mappage" data-role="button" data-transition="slide">Traces de prune</a>
 			<a href="#addprunepage" data-role="button" data-rel="dialog" data-transition="pop">Soumettre une pervenche</a>
+			<a href="#graphzpage" data-role="button" data-transition="slide">Tracer des prunes</a>
 		</div>
 		<div data-role="footer"><h1>Le bib</h1></div>
 	</div>
@@ -80,5 +81,25 @@
 		</div>
 		<div data-role="footer"><h1>Le bib</h1></div>
 	</div>
+	<div data-role="page" id="graphzpage" data-theme="a" data-content-theme="a">
+		<div data-role="header">
+			<a href="#home" data-rel="back">Retour</a>
+			<h1>Oops</h1>
+		</div>
+		<div data-role="content">
+			<div id='graphz' data-role="page" data-theme="a" data-content-theme="a">
+				<p>heya!</p>
+				<!--
+					* % de chance de prune
+					* nb prune / heure général
+					* nb prune / heure restraint
+					* 
+				-->
+				<div id='graph1'></div>
+				<div id='graph2'></div>
+				<div id='graph3'></div>
+				<div id='graph4'></div>
+			</div>
+		</div>
 </body>
 </html>
