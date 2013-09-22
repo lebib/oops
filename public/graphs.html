@@ -11,16 +11,17 @@
 		<script type="text/javascript">
 			var sinPoints = [];
 			$(document).ready(function(){
-				for (var i=0; i<10; i+=0.1){
-						console.log(i);
-				   		sinPoints.push([i,Math.sin(i)]);
-					} 
-					console.log(sinPoints);
-					$.jqplot('chartdiv', [sinPoints],	  
+				// for (var i=0; i<10; i+=0.1){
+				// 		console.log(i);
+				//    		sinPoints.push([i,Math.sin(i)]);
+				// 	} 
+				// 	console.log(sinPoints);
+					$.jqplot('chartdiv',	  
 						{
 					      // Give the plot a title.
 					      title: 'FUCKING Plot.',
 					      series:[{showMarker:false}],
+					      dataRenderer: getDataForMyFuckingChart,
 					      // You can specify options for all axes on the plot at once with
 					      // the axesDefaults object.  Here, we're using a canvas renderer
 					      // to draw the axis label which allows rotated text.
@@ -42,12 +43,21 @@
 					      }
 					   }
 					);
-			});
-			var funcName = function(userData, plotObject, options) {
-				// dans le json d'options : dataRenderer: funcName
-				// doit retourner un array
-  				return data;
-			}
+				});
+				var getDataForMyFuckingChart = function(userData, plotObject, options) {
+					$.ajax({
+				      // have to use synchronous here, else the function
+				      // will return before the data is fetched
+				      async: false,
+				      url: "/getChartDataz?lat=43.60286732167262&lon=3.87317955493927",
+				      dataType:"json",
+				      success: function(data) {
+				      		ret = [data];
+				      	}
+					});
+				return ret;
+			};
+			// da url http://localhost:3000/getChartDataz?lat=43.60286732167262&lon=3.87317955493927
 		</script>
 	</body>
 </html>
