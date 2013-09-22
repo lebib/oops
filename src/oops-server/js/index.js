@@ -18,9 +18,6 @@ exports.init = function(config, cb) {
 };
 
 exports.checkPlace = function(lat, lon, date, cb) {
-    console.log('take this');
-    console.log(lat);
-    console.log(lon);
     date = date || new Date();
     getNearRoad(lat, lon, 1, function(result) {
         if (!result) {
@@ -203,8 +200,8 @@ var _getRoadStatFromGid = function(gid, date, cb) {
     date_right = date_right.getTime() / 1000;
     dow = date.getDay() + 1;
     //Heure fixe pour test (les pervenches ne sortent pas à l'heure de l'apéro !)
-    //hour = date.getHours();
-    hour = 13;
+    hour = date.getHours();
+    //hour = 13;
     total_tranche = 0;
     total_jour = 0;
     where_dow = 'EXTRACT(DOW FROM prune_date) = ' + dow;
@@ -222,6 +219,7 @@ var _getRoadStatFromGid = function(gid, date, cb) {
         .groupBy('gid')
         .then(function(result) {
             if (result.length > 0) {
+		console.log(result);
                 total_tranche = result[0].total_tranche;
                 console.log('total_tranche below:');
                 console.log(result[0].total_tranche);
