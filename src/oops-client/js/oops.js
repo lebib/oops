@@ -13,6 +13,7 @@ var myCoords = {
     lon: 3.87414
 };
 var marker;
+var defaultIcon;
 
 var oTarifs = {
     jaune: ['Limité à 2 heures', {
@@ -52,6 +53,7 @@ oops.loadTemplate = function(name) {
 };
 
 oops.initMap = function() {
+    defaultIcon = L.icon({iconUrl: '/js/leaflet/images/marker-icon.png',  iconSize: [27, 41]});
     mapObj = new L.Map('map', {
         center: new L.LatLng(myCoords.lat, myCoords.lon),
         zoom: 17
@@ -71,6 +73,7 @@ oops.initMap = function() {
         var latlng = this.getLatLng();
         oops.checkPlace(latlng.lat, latlng.lng);
     });
+    marker.setIcon(defaultIcon);
     mapObj.addLayer(osm);
     var popup = L.popup();
 
@@ -117,7 +120,9 @@ oops.checkPlace = function(lat, lon, date) {
             //console.log(result);
             var html;
             var t = result.tarif;
-            if (result.ratio) {
+            if (!result.tarif) {
+                html = '<div class="popupNoInfo">Cette rue est interdite au stationnement.</div>';
+            } else if (result.ratio) {
                 var tColor = t || 'gris';
                 var indice = result.incide || 1;
                 html = '<div class="popupPrices '+tColor+'">';
@@ -140,7 +145,7 @@ oops.checkPlace = function(lat, lon, date) {
                 }
                 html += '<button id="popupButton" class="ui-btn">Plus d\'informations</button>';
             } else {
-                html = '<div class="popupNoInfo">Nous n\'avons aucune information pour cette rue à cet horaire.</div>';
+                html = '<div class="popupNoInfo">Nous n\'avons aucune information pour cette tranche horaire.</div>';
             }
             var style = {
                 weight: 5,
@@ -149,6 +154,16 @@ oops.checkPlace = function(lat, lon, date) {
             }
             var price = 2.5;
             var betterPay = false;
+            if (result.tarif) {
+                if (betterPay) {
+                    var icon = L.icon({iconUrl: '/images/pinpoint_risky.png',  iconSize: [33, 42]})
+                } else {
+                    var icon = L.icon({iconUrl: '/images/pinpoint_safe.png',  iconSize: [33, 42]})
+                }
+            } else {
+                    var icon = defaultIcon;
+            }
+            marker.setIcon(icon);
             if (!currentPopup) {
                 currentPopup = L.popup({
                     minWidth: 381,
