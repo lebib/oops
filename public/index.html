@@ -90,34 +90,43 @@
 			<div id='graphz' data-role="page" data-theme="a" data-content-theme="a">
 				<p>heya!</p>
 				<script>
-					function f1 (x) {
-					    return Math.exp(-0.5 * (x - 1) * (x - 1)) * Math.sin(x + 0.2) + 0.05;
-					}
+					$(window).ready(function() {
+						function f1 (x) {
+						    return Math.exp(-0.5 * (x - 1) * (x - 1)) * Math.sin(x + 0.2) + 0.05;
+						}
 
-					function f2 (x) {
-					    return 0.5 * Math.cos(x - 0.5) + 0.1;
-					}
+						function f2 (x) {
+						    return 0.5 * Math.cos(x - 0.5) + 0.1;
+						}
 
-					var xmin = -1.0,
-					    xmax = 7,
-					    N = 100,
-					    data = d3.range(xmin, xmax, (xmax - xmin) / N).map(function (d) {
-					        return {x: d, y: f1(d)};
-					    })
-					    data2 = d3.range(xmin, xmax, (xmax - xmin) / N).map(function (d) {
-					        return {x: d, y: f2(d)};
-					    });
+						var xmin = -1.0,
+						    xmax = 7,
+						    N = 100,
+						    data = d3.range(xmin, xmax, (xmax - xmin) / N).map(function (d) {
+						        return {x: d, y: f1(d)};
+						    })
+						    data2 = d3.range(xmin, xmax, (xmax - xmin) / N).map(function (d) {
+						        return {x: d, y: f2(d)};
+						    });
 
-					// Build the plot.
-					var plot = xkcdplot();
-					plot("graph1");
+						// Build the plot.
+						var plot2 = xkcdplot();
+						        var paramz = {
+           							 title: "test",
+            							xlabel: "derp",
+            							ylabel: "herp",
+          							  xlim: [-100, 100],
+   							         ylim: [-100, 100]
+ 							       };
+						plot2("#graph1", paramz);
 
-					// Add the lines.
-					plot.plot(data);
-					plot.plot(data2, {stroke: "red"});
+						// Add the lines.
+						plot2.plot(data);
+						plot2.plot(data2, {stroke: "red"});
 
-					// Render the image.
-					plot.xlim([-1.5, 7.5]).draw();
+						// Render the image.
+						plot2.draw();
+					})
 		    	</script>
 				<!--
 					* % de chance de prune
