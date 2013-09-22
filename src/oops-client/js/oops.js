@@ -53,7 +53,7 @@ oops.loadTemplate = function(name) {
 };
 
 oops.initMap = function() {
-    defaultIcon = L.icon({iconUrl: '/js/leaflet/images/marker-icon.png',  iconSize: [27, 41], className: 'customIcon'});
+    defaultIcon = L.icon({iconUrl: '/js/leaflet/images/marker-icon.png',  iconSize: [25, 41], className: 'customIcon'});
     mapObj = new L.Map('map', {
         center: new L.LatLng(myCoords.lat, myCoords.lon),
         zoom: 17
@@ -123,6 +123,7 @@ oops.checkPlace = function(lat, lon, date) {
             if (!result.tarif) {
                 html = '<div class="popupNoInfo">Cette rue est interdite au stationnement.</div>';
             } else if (result.ratio) {
+                if (result.ratio > 99) result.ratio = 99;
                 var tColor = t || 'gris';
                 var indice = result.incide || 1;
                 html = '<div class="popupPrices '+tColor+'">';
@@ -154,16 +155,6 @@ oops.checkPlace = function(lat, lon, date) {
             }
             var price = 2.5;
             var betterPay = false;
-            if (result.tarif) {
-                if (betterPay) {
-                    var icon = L.icon({iconUrl: '/images/pinpoint_risky.png',  iconSize: [36, 41], className: 'customIcon'})
-                } else {
-                    var icon = L.icon({iconUrl: '/images/pinpoint_safe.png',  iconSize: [36, 41], className: 'customIcon'})
-                }
-            } else {
-                    var icon = defaultIcon;
-            }
-            marker.setIcon(icon);
             if (!currentPopup) {
                 currentPopup = L.popup({
                     minWidth: 381,
@@ -187,9 +178,19 @@ oops.checkPlace = function(lat, lon, date) {
                     price = 1.20;
                     break;
             }
-            if (result.stats > 0) {
-                betterPay = (price < (result.stats * 17));
+            if (result.ratio > 0) {
+                betterPay = (price < (result.ratio * 17));
             }
+            if (result.tarif) {
+                if (betterPay) {
+                    var icon = L.icon({iconUrl: '/images/pinpoint_risky.png',  iconSize: [35, 41], className: 'customIcon'})
+                } else {
+                    var icon = L.icon({iconUrl: '/images/pinpoint_safe.png',  iconSize: [35, 41], className: 'customIcon'})
+                }
+            } else {
+                    var icon = defaultIcon;
+            }
+            marker.setIcon(icon);
                 currentLayer = L.geoJson(JSON.parse(result.geojson), {
                     style: style
                 })
@@ -234,17 +235,27 @@ oops.getChartDataz = function(lat, lon, date, cb){
 }
 
 oops.addPrune = function(lat, lon) {
+    var date = $('input[id=pvdate]').val();
+    var time = $('input[id=pvtime]').val();
+    if (date == undefined || time == undefined || date == '' || time == '') {
+        toast("Veuillez renseigner tous les champs");
+        return;
+    }
+    var datetime = date+' '+time+':00';
     $.ajax({
         url: "/addPrune",
+        method: "post",
         data: {
-            lat: lat,
-            lon: lon
+            lat: myCoords.lat,
+            lon: myCoords.lon, 
+            date : datetime,
+            comment: ''
         }
     })
         .done(function(data) {
-            if (console && console.log) {
-                console.log("Sample of data:", data);
-            }
+            $('input[id=pvdate]').val('');
+            $('input[id=pvtime]').val('');
+            toast('La contravention a bien été ajoutée.')
         });
 }
 
@@ -291,7 +302,7 @@ oops.showGraph = function(datas) {
     }
 }
 
-function launchFullScreen(element) {
+var launchFullScreen = function(element) {
     if (element.requestFullScreen) {
         element.requestFullScreen();
     } else if (element.mozRequestFullScreen) {
@@ -299,4 +310,20 @@ function launchFullScreen(element) {
     } else if (element.webkitRequestFullScreen) {
         element.webkitRequestFullScreen();
     }
+}
+
+var toast = function(msg){
+    $("<div class='ui-loader ui-overlay-shadow ui-body-e ui-corner-all'><h3>"+msg+"</h3></div>")
+    .css({ display: "block", 
+        opacity: 0.90, 
+        position: "fixed",
+        padding: "7px",
+        "text-align": "center",
+        width: "270px",
+        left: ($(window).width() - 284)/2,
+        top: $(window).height()/2 })
+    .appendTo( $.mobile.pageContainer ).delay( 1500 )
+    .fadeOut( 400, function(){
+        $(this).remove();
+    });
 }

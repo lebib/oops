@@ -72,7 +72,8 @@ function initExpress() {
 	});
 
 	app.post('/addPrune', function(req, res) {
-		oops.addPrune(req.query.lat, req.query.lon, req.query.date, req.query.comment, function(result) {
+		oops.addPrune(req.body.lat, req.body.lon, req.body.date, req.body.comment, function(result) {
+			console.log("ADDED");
 			res.json(req, result);
 		});
 	});

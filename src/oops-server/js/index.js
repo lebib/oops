@@ -34,6 +34,7 @@ exports.checkPlace = function(lat, lon, date, cb) {
 }
 
 exports.addPrune = addPrune = function(lat, lon, date, comment, cb) {
+    console.log(' ----- '+lat+' -- '+lon+' ----'+date);
     getNearRoad(lat, lon, 1, function(result) {
         addPruneForRoad(result.gid, date, comment, cb); // corrigé data en date, arg 2
     })
@@ -46,6 +47,7 @@ exports.getPlaceInfoz = getPlaceInfoz = function(arr, date, cb) {
     var gid = null;
     var geojson = null;
     if (typeof(arr) == 'string') {
+        console.log('oh');
         gid = arr.gid;
         geojson = arr.geojson;
         tarif = arr.tarif;
@@ -101,13 +103,11 @@ exports.deletePruneTable = deletePruneTable = function() {
 exports.injectFakeDatas = injectFakeDatas = function() {
     // Get all Roads
     console.log("Import fake dataz");
-         
     knex("opennodata")
         .select('gid')
-	.where(knex.raw('tarifs2011 IS NOT NULL') )
         .then(function(roads) {
-	    console.log('Insertz done.');
-	    generateFakePrunes(roads, 0, function() {
+            console.log('Insertz done.');
+            generateFakePrunes(roads, 0, function() {
                 console.log("Done inserting datas");
             })
         }, function(err) {
@@ -218,6 +218,7 @@ var _getRoadStatFromGid = function(gid, date, cb) {
         .groupBy('gid')
         .then(function(result) {
             if (result.length > 0) {
+		console.log(result);
                 total_tranche = result[0].total_tranche;
                 console.log('total_tranche below:');
                 console.log(result[0].total_tranche);
