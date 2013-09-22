@@ -147,6 +147,20 @@ oops.getRoadStat = function(lat, lon, date, cb) {
         });
 }
 
+oops.getChartDataz = function(lat, lon, date, cb){
+    $.ajax({
+	url: "/getChartDataz",
+	data: {
+	    lat: lat,
+	    lon: lon,
+	    date: date
+	}
+    })
+	.done(function(result){
+	    cb(result);
+	});
+}
+
 oops.addPrune = function(lat, lon) {
     $.ajax({
         url: "/addPrune",

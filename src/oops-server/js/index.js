@@ -18,6 +18,9 @@ exports.init = function(config, cb) {
 };
 
 exports.checkPlace = function(lat, lon, date, cb) {
+    console.log('take this');
+    console.log(lat);
+    console.log(lon);
     date = date || new Date();
     getNearRoad(lat, lon, 1, function(result) {
         if (!result) {
@@ -240,4 +243,33 @@ var _getTotalJour = function(total_tranche, gid, where_dow, cb) {
         }, function(err) {
             console.log("_getTotalJour SQL Error: " + err);
         });
+}
+
+exports.getChartDataz = getChartData = function(lat, lon, date, cb){
+    console.log(lat);
+    console.log(lon);
+    var chartDataz = [];
+    date = date || new Date();
+
+    getNearRoad(lat, lon, 1, function(result) {    
+	gid = result[0].gid;
+	_iterateChartDataz(chartDataz, date, 9, gid, cb);
+    })
+}
+
+var _iterateChartDataz = function(chartDataz, date, i, gid, cb){
+	console.log(gid);
+    if(i<19){
+	date.setHours(i);
+	console.log(date);
+	_getRoadStatFromGid(gid, date, function(rez){
+	    if(rez){
+		chartDataz.push([rez,i]);
+	    }
+	    i++;
+	    _iterateChartDataz(chartDataz, date, i, gid, cb);
+	})
+    }else {
+	cb(chartDataz);
+    }
 }
