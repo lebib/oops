@@ -64,8 +64,12 @@ exports.getPlaceInfoz = getPlaceInfoz = function(arr, date, cb) {
     _getRoadStatFromGid(gid, date, function(stats) {
         console.log('Da statz below :');
         console.log(stats);
-        ret.ratio = stats[0];
-        ret.indice = stats[1];
+        if (stats) {
+            ret.ratio = stats[0];
+            ret.indice = stats[1];
+        } else {
+            ret = {ratio: null, indice: null};
+        }
         cb(ret);
     })
 }
