@@ -14,6 +14,8 @@
 	<script src="/js/jquery-mobile/jquery.mobile-1.3.2.min.js"></script>
 	<script src="/js/leaflet/leaflet.js"></script>
 	<script src="/js/ui.js"></script>
+	<script language="javascript" type="text/javascript" src="/js/jquery/jquery.jqplot.js"></script>
+	<link rel="stylesheet" type="text/css" href="/css/jquery.jqplot.css" />
 	<script>
 	jQuery(document).ready(function() {
 		launchFullScreen(document.documentElement);
@@ -95,55 +97,63 @@
 		<div data-role="content">
 			<div id='graphz' data-role="page" data-theme="a" data-content-theme="a">
 				<p>heya!</p>
-				<script>
-					$(window).ready(function() {
-						function f1 (x) {
-						    return Math.exp(-0.5 * (x - 1) * (x - 1)) * Math.sin(x + 0.2) + 0.05;
-						}
-
-						function f2 (x) {
-						    return 0.5 * Math.cos(x - 0.5) + 0.1;
-						}
-
-						var xmin = -1.0,
-						    xmax = 7,
-						    N = 100,
-						    data = d3.range(xmin, xmax, (xmax - xmin) / N).map(function (d) {
-						        return {x: d, y: f1(d)};
-						    })
-						    data2 = d3.range(xmin, xmax, (xmax - xmin) / N).map(function (d) {
-						        return {x: d, y: f2(d)};
-						    });
-
-						// Build the plot.
-						var plot2 = xkcdplot();
-						        var paramz = {
-           							 title: "test",
-            							xlabel: "derp",
-            							ylabel: "herp",
-          							  xlim: [-100, 100],
-   							         ylim: [-100, 100]
- 							       };
-						plot2("#graph1", paramz);
-
-						// Add the lines.
-						plot2.plot(data);
-						plot2.plot(data2, {stroke: "red"});
-
-						// Render the image.
-						plot2.draw();
-					})
-		   	 	</script>
 				<!--
 					* % de chance de prune
 					* nb prune / heure général
 					* nb prune / heure restraint
 					* 
 				-->
-				<div id='graph1' style="width: 250px; height: 100px;">fu</div>
+				<div id='graph1' style="width: 550px; height: 300px;">fu</div>
 				<div id='graph2'></div>
 				<div id='graph3'></div>
 				<div id='graph4'></div>
+				<script type="text/javascript">
+					$(document).ready(function(){
+							$.jqplot('graph1',	  
+								{
+							      // Give the fucking plot a title.
+							      title: 'FUCKING Plot.',
+							      series:[{showMarker:false}],
+							      dataRenderer: getDataForMyFuckingChart,
+							      // You can specify options for all axes on the plot at once with
+							      // the axesDefaults object.  Here, we're using a canvas renderer
+							      // to draw the axis label which allows rotated text.
+							      // An axes object holds options for all axes.
+							      // Allowable axes are xaxis, x2axis, yaxis, y2axis, y3axis, ...
+							      // Up to 9 y axes are supported.
+							      axes: {
+							        // options for each axis are specified in seperate option objects.
+							        xaxis: {
+							          label: "dayz",
+							          // Turn off "padding".  This will allow data point to lie on the
+							          // edges of the grid.  Default padding is 1.2 and will keep all
+							          // points inside the bounds of the grid.
+							          pad: 0
+							        },
+							        yaxis: {
+							          label: "bitchies"
+							        }
+							      }
+							   }
+							);
+						});
+						var getDataForMyFuckingChart = function(userData, plotObject, options) {
+							// var test = marker.getLatLng();
+							// console.log(test);
+							$.ajax({
+						      // have to use synchronous here, else the function
+						      // will return before the data is fetched
+						      async: false,
+						      url: "/getChartDataz?lat=43.60286732167262&lon=3.87317955493927",
+						      dataType:"json",
+						      success: function(data) {
+						      		ret = [data];
+						      	}
+							});
+						return ret;
+					};
+					// da url http://localhost:3000/getChartDataz?lat=43.60286732167262&lon=3.87317955493927
+		   	 	</script>
 			</div>
 		</div>
 </body>

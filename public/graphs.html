@@ -45,6 +45,8 @@
 					);
 				});
 				var getDataForMyFuckingChart = function(userData, plotObject, options) {
+					var test = marker.getLatLng();
+					console.log(test);
 					$.ajax({
 				      // have to use synchronous here, else the function
 				      // will return before the data is fetched
