@@ -24,14 +24,9 @@ exports.checkPlace = function(lat, lon, date, cb) {
             cb("No road found found");
         } else {
             getNearRacketMachines(lat, lon, function(racketmachine) {
-                if (err) {
-                    console.log(err);
-                }
-                getPrunes(result, date, function(err, prunes) {
-                    if (err) {
-                        console.log(err);
-                    }
-                    prunes.racketmachine = racketmachine[0];
+                getPrunes(result, date, function(prunes) {
+                    prunes[0].racketmachine = racketmachine[0];
+                    console.log(prunes);
                     cb(prunes);
                 }, 0)
             });
@@ -79,7 +74,7 @@ exports.getPrunes = getPrunes = function(arr, date, cb, i, ret) {
                     if (i < arr.length) {
                         getPrunes(arr, cb, i, ret);
                     } else {
-                        cb(null, ret)
+                        cb(ret)
                     }
                 })
             } else {
