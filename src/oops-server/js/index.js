@@ -25,7 +25,7 @@ exports.checkPlace = function(lat, lon, date, cb) {
         } else {
             getNearRacketMachines(lat, lon, function(racketmachine) {
                 getPlaceInfoz(result, date, function(place) {
-                    place.racketmachine = racketmachine[0];
+                    place[0].racketmachine = racketmachine[0];
                     cb(place);
                 })
             });
@@ -40,7 +40,7 @@ exports.addPrune = addPrune = function(lat, lon, date, comment, cb) {
 }
 
 exports.getPlaceInfoz = getPlaceInfoz = function(arr, date, cb) {
-    var ret =[];
+    var ret ={};
     var recursive = false;
     console.log('Get da place infoz !');
     var gid = null;
@@ -61,6 +61,7 @@ exports.getPlaceInfoz = getPlaceInfoz = function(arr, date, cb) {
     _getRoadStatFromGid(gid, date, function(stats) {
         console.log('Da statz below :');
 	console.log(stats);
+	console.log(ret);
         ret.stats = stats;
         cb(ret);
     })
