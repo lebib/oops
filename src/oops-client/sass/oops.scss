@@ -33,13 +33,13 @@
 
 .track_prune {
 	width: 447px;
-	margin: 30px auto 60px auto;
 	padding-left: 90px;
+	margin: 0 auto;
 }
 
 .scan_prune {
+	margin: 34px auto 60px auto;
 	width: 292px;
-	margin: 0 auto;
 }
 
 .ui-content {
@@ -55,6 +55,7 @@
 	display: inline-block;
 	vertical-align: middle;
 	text-shadow: none;
+	margin-top: 200px;
 	.title {
 		font-family: Mont;
 		padding: 15px 0;
@@ -136,6 +137,7 @@
 	font-family: Mont;
 	text-shadow: none;
 	color: #000;
+	text-align: center;
 }
 
 .popupTarifTitle {
