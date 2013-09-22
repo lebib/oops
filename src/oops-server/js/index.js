@@ -49,6 +49,7 @@ exports.addPrune = addPrune = function(lat, lon, date, comment, cb) {
 exports.getPrunes = getPrunes = function(arr, date, cb, i, ret) {
     var ret = ret || [];
     var recursive = false;
+    console.log('Get da prune !');
     var gid = null;
     var geojson = null;
     if (typeof(arr) == 'string') {
@@ -139,7 +140,7 @@ exports.injectFakeDatas = injectFakeDatas = function() {
                 console.log("ici");
             })
         }, function(err) {
-            console.log("SQL Error: " + err);
+            console.log("injectFakeDatas SQL Error: " + err);
         });
 }
 
@@ -194,7 +195,7 @@ var getNearRoad = function(lat, lon, limit, cb) {
         .then(function(result) {
             cb(result);
         }, function(err) {
-            console.log("SQL Error: " + err);
+            console.log("getNearRoad SQL Error: " + err);
         });
 }
 
@@ -209,7 +210,7 @@ var getNearRacketMachines = function(lat, lon, limit, cb) {
         .then(function(result) {
             cb(result);
         }, function(err) {
-            console.log("SQL Error: " + err);
+            console.log("getNearRacketMachines SQL Error: " + err);
         });
 }
 
@@ -220,24 +221,30 @@ var _getRoadStatFromGid = function(gid, date, cb) {
     date_right.setHours(date.getHours() + 1);
     date_right = date_right.getTime() / 1000;
     dow = date.getDay() + 1;
-    hour = date.getHours();
+    //Heure fixe pour test (les pervenches ne sortent pas à l'heure de l'apéro !)
+//hour = date.getHours();
+    hour = 13;
     total_tranche = 0;
     total_jour = 0;
     where_dow = 'EXTRACT(DOW FROM prune_date) = ' + dow;
+    where_hour = 'EXTRACT(HOUR FROM prune_date) = ' + hour;
     where_date = 'EXTRACT(EPOCH FROM prune_date) BETWEEN ' + date_left + ' AND ' + date_right;
 
     knex("prunes")
         .select(knex.raw('count(1) as total_tranche'))
         .where(knex.raw(where_dow))
 	.andWhere('gid', '=', gid)
-         /*  .andWhere(function(){
+    // A peaufiner pour selectionner une tranche plus interessante. On sélectionne pour le moment l'heure courante
+        /*.andWhere(function(){
             this.whereBetween(knex.raw('EXTRACT(HOUR FROM prune_date)'), [hour, hour + 1])
            })*/
+	.andWhere(knex.raw(where_hour))
         .groupBy('gid')
 	.then(function(result){
 	    if(result.length > 0){
 		total_tranche = result[0].total_tranche ;
-		console.log('getRoadStat');
+		console.log('total_tranche below:');
+		console.log( result[0].total_tranche) ;
 		_getTotalJour(total_tranche,gid,where_dow,cb);
 	    }
 	}, function(err) {
@@ -246,7 +253,6 @@ var _getRoadStatFromGid = function(gid, date, cb) {
 }
 
 var _getTotalJour = function(total_tranche,gid,where_dow,cb){
-    console.log('getTotalJour');
     knex("prunes")
 	.select(knex.raw('count(1) as total_jour'))
 	.where(knex.raw(where_dow))
@@ -254,8 +260,8 @@ var _getTotalJour = function(total_tranche,gid,where_dow,cb){
 	.groupBy('gid')
 	.then(function(result) {
             total_jour = result[0].total_jour;
+	    console.log('total_jour below :');
 	    console.log( result[0].total_jour);
-	    console.log('Uh ?!');
 	    cb(total_tranche/total_jour);
 	}, function(err) {
 	    console.log("_getTotalJour SQL Error: " + err);
