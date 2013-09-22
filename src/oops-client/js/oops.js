@@ -79,7 +79,7 @@ oops.checkPlace = function(lat, lon, date) {
                 color: "#777777"
             }
 	    var price;
-	    var betterPay = FALSE;
+	    var betterPay = false;
             if (!currentPopup) {
                 currentPopup = L.popup();
             }

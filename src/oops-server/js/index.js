@@ -24,11 +24,10 @@ exports.checkPlace = function(lat, lon, date, cb) {
             cb("No road found found");
         } else {
             getNearRacketMachines(lat, lon, function(racketmachine) {
-                getPrunes(result, date, function(prunes) {
-                    prunes[0].racketmachine = racketmachine[0];
-                    console.log(prunes);
-                    cb(prunes);
-                }, 0)
+                getPlaceInfoz(result, date, function(place) {
+                    place.racketmachine = racketmachine[0];
+                    cb(place);
+                })
             });
         }
     })
@@ -40,53 +39,31 @@ exports.addPrune = addPrune = function(lat, lon, date, comment, cb) {
     })
 }
 
-exports.getPrunes = getPrunes = function(arr, date, cb, i, ret) {
-    var ret = ret || [];
+exports.getPlaceInfoz = getPlaceInfoz = function(arr, date, cb) {
+    var ret =[];
     var recursive = false;
-    console.log('Get da prune !');
+    console.log('Get da place infoz !');
     var gid = null;
     var geojson = null;
     if (typeof(arr) == 'string') {
+	console.log('oh');
         gid = arr.gid;
         geojson = arr.geojson;
         tarif = arr.tarif;
     } else {
-        gid = arr[i].gid;
-        geojson = arr[i].geojson;
-        tarif = arr[i].tarif;
-        recursive = true;
+        gid = arr[0].gid;
+        geojson = arr[0].geojson;
+        tarif = arr[0].tarif;
     }
-    knex("prunes")
-        .select(['pid', 'prune_date', 'comment'])
-        .where({
-            gid: gid
-        })
-        .then(function(prunes) {
-            if ((i || i === 0) && recursive) {
-                ret[i] = {};
-                ret[i].geojson = geojson;
-                ret[i].prunes = prunes;
-                ret[i].tarif = tarif;
-                _getRoadStatFromGid(gid, date, function(stats) {
-                    console.log('Da statz below :');
-                    ret[i].stats = stats;
-                    i++;
-                    if (i < arr.length) {
-                        getPrunes(arr, cb, i, ret);
-                    } else {
-                        cb(ret)
-                    }
-                })
-            } else {
-                _getRoadStatFromGid(gid, date, function(stats) {
-                    ret['geojson'] = geojson;
-                    ret['prunes'].push(prunes);
-                    cb(bull, ret);
-                });
-            }
-        }, function(err) {
-            cb(err);
-        })
+    ret.gid = gid;
+    ret.geojson = geojson;
+    ret.tarif = tarif;
+    _getRoadStatFromGid(gid, date, function(stats) {
+        console.log('Da statz below :');
+	console.log(stats);
+        ret.stats = stats;
+        cb(ret);
+    })
 }
 
 
@@ -212,6 +189,7 @@ var getNearRacketMachines = function(lat, lon, cb) {
 }
 
 var _getRoadStatFromGid = function(gid, date, cb) {
+    console.log(gid);
     date = date || new Date();
     date_left = date.getTime() / 1000;
     date_right = date;
