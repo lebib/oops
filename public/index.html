@@ -19,9 +19,15 @@
 	<script>
 	jQuery(document).ready(function() {
 		launchFullScreen(document.documentElement);
+		/*
 	  	if(navigator.geolocation) {
 		        navigator.geolocation.getCurrentPosition(oops.setPosition, onError);             
 	  	}
+	  	*/
+	  	var position = {coords:{}};
+	  	position.coords.latitude = 43.62048129202696;
+	  	position.coords.longitude = 3.876843452453613;
+	  	oops.setPosition(position);
   	});
 	</script>
 	<script src="/js/d3/d3.v2.min.js"></script>

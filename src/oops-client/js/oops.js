@@ -56,7 +56,7 @@ oops.initMap = function() {
     defaultIcon = L.icon({iconUrl: '/js/leaflet/images/marker-icon.png',  iconSize: [25, 41], className: 'customIcon'});
     mapObj = new L.Map('map', {
         center: new L.LatLng(myCoords.lat, myCoords.lon),
-        zoom: 17
+        zoom: 15
     });
     var osm = new L.TileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png');
 
@@ -144,7 +144,6 @@ oops.checkPlace = function(lat, lon, date) {
                 if (result.racketmachine && result.racketmachine.distance) {
                     html += '<div class="popupDistance"><div class="metres">'+Math.round(result.racketmachine.distance)+' m</div><div class="label">Distance de l\'horodateur le plus proche</div><div class="clearfix"></div></div>'
                 }
-                html += '<button id="popupButton" class="ui-btn">Plus d\'informations</button>';
             } else {
                 html = '<div class="popupNoInfo">Nous n\'avons aucune information pour cette tranche horaire.</div>';
             }
@@ -197,6 +196,7 @@ oops.checkPlace = function(lat, lon, date) {
                     .addTo(mapObj);
 
             var markerLatLng = marker.getLatLng();
+            console.log(markerLatLng);
             var bounds = mapObj.getBounds();
             var tmp = (bounds._northEast.lat-bounds._southWest.lat)/14;
             currentPopup.setLatLng([markerLatLng.lat+tmp, markerLatLng.lng]);
