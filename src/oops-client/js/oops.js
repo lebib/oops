@@ -1,5 +1,3 @@
-
-
 var tpl;
 define = function(jade, cb) {
     tpl = cb();
@@ -11,11 +9,15 @@ var currentPopup = null;
 var plot = null;
 
 oops.loadTemplate = function(name) {
-    $("div#content")
-        .html(tpl(name));
+    $("#content").html(tpl(name));
         $('#content').trigger('create');
 }
 
+    $(window).on("pagechange", function(event, ui){
+         if ($.mobile.activePage.attr('id') == 'mappage') {
+             map.invalidateSize(false);
+         }
+    });
  
 oops.checkPlace = function(lat, lon) {
     $.ajax({
