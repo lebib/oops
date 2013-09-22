@@ -26,14 +26,17 @@
 </head>
 <body>
 	<!-- SPLASH -->
-	<div data-role="page" id="spash" data-theme="a" data-content-theme="a">
+	<div data-role="page" id="splashpage" data-theme="a" data-content-theme="a">
 		<div data-role="header">
 			<h1>Oops</h1>
 		</div>
 		<div data-role="content">
-			<a href="#home">Home</a>
+			<div id="splash">
+				<a href="#home"  data-transition="slide"><img id="splashimg" src="/images/splash.png" alt="Track prune"></img></a>
+				<div class="title">Original Open Pervenche Statistics</div>
+			</div>
+			<div class="caption">Édition Montpellier Agglo</div>
 		</div>
-		<div data-role="footer"><h1>Le bib</h1></div>
 	</div>
 
 	<!-- HOME -->
@@ -42,11 +45,14 @@
 			<h1>Oops</h1>
 		</div>
 		<div data-role="content">
-			<a href="#mappage" data-role="button" data-transition="slide">Traces de prune</a>
-			<a href="#addprunepage" data-role="button" data-rel="dialog" data-transition="pop">Soumettre une pervenche</a>
+			<div class="track_prune">
+				<a href="#mappage"  data-transition="slide"><img src="/images/track_prune.png" alt="Track prune"></img></a>
+			</div>
+			<div class="scan_prune">
+				<a href="#addprunepage"  data-rel="dialog" data-transition="pop"><img src="/images/scan_prune.png" alt="Track prune"></img></a>
+			</div>
 			<a href="#graphzpage" data-role="button" data-transition="slide">Tracer des prunes</a>
 		</div>
-		<div data-role="footer"><h1>Le bib</h1></div>
 	</div>
 
 	<!-- MAP -->
@@ -58,7 +64,6 @@
 		<div data-role="content" id="mapcontent">
 			<div id="map"></div>
 		</div>
-		<div data-role="footer"><h1>Le bib</h1></div>
 	</div>
 
 	<!-- ADD -->
@@ -79,7 +84,6 @@
 				</li>
 			</ul>		       	 
 		</div>
-		<div data-role="footer"><h1>Le bib</h1></div>
 	</div>
 	<div data-role="page" id="graphzpage" data-theme="a" data-content-theme="a">
 		<div data-role="header">
@@ -127,7 +131,7 @@
 						// Render the image.
 						plot2.draw();
 					})
-		    	</script>
+		   	 	</script>
 				<!--
 					* % de chance de prune
 					* nb prune / heure général
