@@ -53,7 +53,7 @@ oops.loadTemplate = function(name) {
 };
 
 oops.initMap = function() {
-    defaultIcon = L.icon({iconUrl: '/js/leaflet/images/marker-icon.png',  iconSize: [27, 41]});
+    defaultIcon = L.icon({iconUrl: '/js/leaflet/images/marker-icon.png',  iconSize: [27, 41], className: 'customIcon'});
     mapObj = new L.Map('map', {
         center: new L.LatLng(myCoords.lat, myCoords.lon),
         zoom: 17
@@ -73,7 +73,7 @@ oops.initMap = function() {
         var latlng = this.getLatLng();
         oops.checkPlace(latlng.lat, latlng.lng);
     });
-    marker.setIcon(defaultIcon);
+    //marker.setIcon(defaultIcon);
     mapObj.addLayer(osm);
     var popup = L.popup();
 
@@ -156,9 +156,9 @@ oops.checkPlace = function(lat, lon, date) {
             var betterPay = false;
             if (result.tarif) {
                 if (betterPay) {
-                    var icon = L.icon({iconUrl: '/images/pinpoint_risky.png',  iconSize: [33, 42]})
+                    var icon = L.icon({iconUrl: '/images/pinpoint_risky.png',  iconSize: [36, 41], className: 'customIcon'})
                 } else {
-                    var icon = L.icon({iconUrl: '/images/pinpoint_safe.png',  iconSize: [33, 42]})
+                    var icon = L.icon({iconUrl: '/images/pinpoint_safe.png',  iconSize: [36, 41], className: 'customIcon'})
                 }
             } else {
                     var icon = defaultIcon;
