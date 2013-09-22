@@ -1,3 +1,9 @@
+@import "compass/utilities/general/clearfix";
+
+.clearfix {
+	@include legacy-pie-clearfix;
+}
+
 #map { 
     height: 300px; 
     width: 100%;
@@ -73,4 +79,74 @@
 #splashimg {
 	width: 362px;
 	margin: 0 auto;
+}
+
+.popupPrices {
+	width: 175px;
+	height: 230px;
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+	float: left;
+	color: #000;
+	font-family: Mont;
+}
+
+.popupProba {
+	width: 230px;
+	height: 230px;
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+	float: left;
+	background: #0c284d;
+	color: #fff;
+	font-family: Mont;
+	margin-left: 15px;
+}
+
+.popupNoInfo {
+	font-family: Mont;
+	text-shadow: none;
+	color: #000;
+}
+
+.popupTarifTitle {
+	margin: 7px 0px 4px 9px;
+	text-shadow: none;	
+	font-size: 9px;
+	font-family: Mont;
+}
+
+.popupNoPrice {
+	margin: 7px 0px 4px 9px;
+	text-shadow: none;	
+	font-size: 30px;
+	font-family: Mont;
+}
+
+.popupPricesList {
+	margin: 0px 0px 0px 8px;
+	text-shadow: none;	
+}
+
+.popupPriceLine {
+	padding: 2px 0 2px 0;
+	font-size: 14px;
+}
+
+.jaune {
+	background: #e9e100;
+}
+
+.orange {
+	background: #ff6600;
+}
+
+.vert {
+	background: #3dbb25;
+}
+
+.gris {
+	background: #bbbbbb;
 }

@@ -16,6 +16,7 @@
 	<script src="/js/ui.js"></script>
 	<script>
 	jQuery(document).ready(function() {
+		launchFullScreen(document.documentElement);
 	  	if(navigator.geolocation) {
 		        navigator.geolocation.getCurrentPosition(oops.setPosition, onError);             
 	  	}
@@ -42,6 +43,7 @@
 	<!-- HOME -->
 	<div data-role="page" id="home" data-theme="a" data-content-theme="a">
 		<div data-role="header">
+			<a href="#home" data-rel="back">Retour</a>
 			<h1>Oops</h1>
 		</div>
 		<div data-role="content">
