@@ -67,8 +67,6 @@ exports.getPlaceInfoz = getPlaceInfoz = function(arr, date, cb) {
         if (stats) {
             ret.ratio = stats[0];
             ret.indice = stats[1];
-        } else {
-            ret = {ratio: null, indice: null};
         }
         cb(ret);
     })

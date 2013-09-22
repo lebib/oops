@@ -170,12 +170,10 @@ oops.checkPlace = function(lat, lon, date) {
             if (result.stats > 0) {
                 betterPay = (price < (result.stats * 17));
             }
-            if (result.geojson) {
                 currentLayer = L.geoJson(JSON.parse(result.geojson), {
                     style: style
                 })
                     .addTo(mapObj);
-            }
 
             var markerLatLng = marker.getLatLng();
             currentPopup.setLatLng([markerLatLng.lat, markerLatLng.lng]);
