@@ -72,7 +72,6 @@ oops.checkPlace = function(lat, lon, date) {
         .done(function(result) {
             console.log(result);
 	    console.log('Yo!');
-            var prunesList = [];
             var html = '<div class="popupTitle">Contraventions relevées dans cette rue</div>';
             var style = {
                 weight: 5,
@@ -88,8 +87,7 @@ oops.checkPlace = function(lat, lon, date) {
                 mapObj.removeLayer(currentLayer);
             }
 	    console.log('here ?');
-            result.forEach(function(line) {
-                switch (line.tarif) {
+                switch (result.tarif) {
                 case 'jaune':
                     style.color = "#FFFF00";
                     price = 4;
@@ -103,27 +101,13 @@ oops.checkPlace = function(lat, lon, date) {
 		    price = 1.20;
                     break;
                 }
-		if(line.stats.lenght()>0){
-		    betterPay = (price < (line.stats * 17));
+		if(result.stats>0){
+		    betterPay = (price < (result.stats * 17));
 		}
-		line.betterPay = betterPay;
-		console.log(line.betterPay);
-		console.log('dafuQ');
-                if (line.prunes.length) {
-                    line.prunes.forEach(function(p) {
-                        var n = p.prune_date.match(/([0-9]+)/g);
-                        var day = n[0] + '/' + n[1] + '/' + n[2];
-                        var hour = n[3] + 'h ' + n[4] + 'min';
-                        prunesList.push('Le ' + day + ' à ' + hour);
-                    })
-                }
-                html += prunesList.join("<br />");
-                //prunesList.push(JSON.parse(line.prunes));
-                currentLayer = L.geoJson(JSON.parse(line.geojson), {
+                currentLayer = L.geoJson(JSON.parse(result.geojson), {
                     style: style
                 })
                     .addTo(mapObj);
-            });
 
             var markerLatLng = marker.getLatLng();
             currentPopup.setLatLng([markerLatLng.lat, markerLatLng.lng]);
