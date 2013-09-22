@@ -23,19 +23,18 @@ exports.checkPlace = function(lat, lon, date, cb) {
         if (!result) {
             cb("No road found found");
         } else {
-            getPrunes(result, date, function(err, prunes) {
+            getNearRacketMachines(lat, lon, function(racketmachine) {
                 if (err) {
                     console.log(err);
                 }
-
-                getNearRacketMachines(lat, lon, function(err, racketmachine) {
+                getPrunes(result, date, function(err, prunes) {
                     if (err) {
                         console.log(err);
                     }
-                    prunes.racketmachine = racketmachine;
+                    prunes.racketmachine = racketmachine[0];
                     cb(prunes);
-                });
-            }, 0)
+                }, 0)
+            });
         }
     })
 }
@@ -75,8 +74,7 @@ exports.getPrunes = getPrunes = function(arr, date, cb, i, ret) {
                 ret[i].tarif = tarif;
                 _getRoadStatFromGid(gid, date, function(stats) {
                     console.log('Da statz below :');
-		    console.log(stats);
-		    ret[i].stats = stats;
+                    ret[i].stats = stats;
                     i++;
                     if (i < arr.length) {
                         getPrunes(arr, cb, i, ret);
@@ -110,10 +108,8 @@ exports.addPruneForRoad = addPruneForRoad = function(roadGid, date, comment, cb)
             comment: comment
         })
         .then(function() {
-            console.log('...');
             cb();
         }, function(err) {
-            console.log('rly?');
             cb(err);
         })
 }
@@ -137,7 +133,7 @@ exports.injectFakeDatas = injectFakeDatas = function() {
         .then(function(roads) {
             console.log('Insertz done.');
             generateFakePrunes(roads, 0, function() {
-                console.log("ici");
+                console.log("Done inserting datas");
             })
         }, function(err) {
             console.log("injectFakeDatas SQL Error: " + err);
@@ -171,7 +167,6 @@ var insertFakePrunes = function(max, i, cb) {
     var heure = h + ':' + min;
     // console.log("Data : 2012-09-" + jour + ' ' + heure)
     addPruneForRoad(res.gid, "2012-09-" + jour + ' ' + heure + ':00', '', function(err) {
-        console.log(i+' -- '+max);
         if (err) {
             console.log("Error creating Prune: " + err);
         }
@@ -203,20 +198,19 @@ var getNearRacketMachines = function(lat, lon, cb) {
     lat = parseFloat(lat);
     lon = parseFloat(lon);
     knex("racketmachines")
-        .select(knex.raw("numero, geom, ST_AsGeoJson(ST_Transform(geom, 4326)) as geojson"))
+        .select(knex.raw("numero, adresse, ST_AsText(geom) as geom, ST_AsGeoJson(ST_Transform(geom, 4326)) as geojson"))
         .orderBy(knex.raw("ST_Transform(ST_SetSRID(ST_MakePoint(" + lon + ", " + lat + "), 4326), 2154) <-> geom"))
         .limit(1)
         .then(function(racketmachine) {
-            console.log(ST_Transform(ST_SetSRID(ST_MakePoint(" + lon + ", " + lat + "), 4326), 2154));
             knex("racketmachines")
-            .select(knex.raw("SELECT ST_Distance(ST_SetSRID(GeomFromWKB('"+racketmachine.geom+"'), 2154), ST_Transform(ST_SetSRID(ST_MakePoint(" + lon + ", " + lat + "), 4326), 2154))"))
-            .then(function(distance) {
-                console.log('  -- distance 00 ');
-                console.log(distance);
-            }, function(err) {
-              console.log("getNearRacketMachines SQL Error: " + err);
-            })
-            cb(racketmachine);
+                .select(knex.raw("ST_Distance_Sphere(ST_Transform(ST_SetSRID(ST_GeomFromText('" + racketmachine[0].geom + "'), 2154), 4326), ST_SetSRID(ST_MakePoint(" + lon + ", " + lat + "), 4326)) as distance"))
+                .limit(1)
+                .then(function(res) {
+                    racketmachine.distance = res[0].distance;
+                    cb(racketmachine);
+                }, function(err) {
+                    console.log("getNearRacketMachines SQL Error: " + err);
+                })
         }, function(err) {
             console.log("getNearRacketMachines SQL Error: " + err);
         });
@@ -230,7 +224,7 @@ var _getRoadStatFromGid = function(gid, date, cb) {
     date_right = date_right.getTime() / 1000;
     dow = date.getDay() + 1;
     //Heure fixe pour test (les pervenches ne sortent pas à l'heure de l'apéro !)
-//hour = date.getHours();
+    //hour = date.getHours();
     hour = 13;
     total_tranche = 0;
     total_jour = 0;
@@ -240,39 +234,37 @@ var _getRoadStatFromGid = function(gid, date, cb) {
     knex("prunes")
         .select(knex.raw('count(1) as total_tranche'))
         .where(knex.raw(where_dow))
-	.andWhere('gid', '=', gid)
+        .andWhere('gid', '=', gid)
     // A peaufiner pour selectionner une tranche plus interessante. On sélectionne pour le moment l'heure courante
-        /*.andWhere(function(){
+    /*.andWhere(function(){
             this.whereBetween(knex.raw('EXTRACT(HOUR FROM prune_date)'), [hour, hour + 1])
            })*/
-	.andWhere(knex.raw(where_hour))
+    .andWhere(knex.raw(where_hour))
         .groupBy('gid')
-	.then(function(result){
-	    if(result.length > 0){
-		total_tranche = result[0].total_tranche ;
-		console.log('total_tranche below:');
-		console.log( result[0].total_tranche) ;
-		_getTotalJour(total_tranche,gid,where_dow,cb);
-	    }
-	}, function(err) {
+        .then(function(result) {
+            if (result.length > 0) {
+                total_tranche = result[0].total_tranche;
+                console.log('total_tranche below:');
+                console.log(result[0].total_tranche);
+                _getTotalJour(total_tranche, gid, where_dow, cb);
+            }
+        }, function(err) {
             console.log("_getRoadStatFromGid SQL Error: " + err);
-	});
+        });
 }
 
-var _getTotalJour = function(total_tranche,gid,where_dow,cb){
+var _getTotalJour = function(total_tranche, gid, where_dow, cb) {
     knex("prunes")
-	.select(knex.raw('count(1) as total_jour'))
-	.where(knex.raw(where_dow))
-	.andWhere('gid', '=', gid)
-	.groupBy('gid')
-	.then(function(result) {
+        .select(knex.raw('count(1) as total_jour'))
+        .where(knex.raw(where_dow))
+        .andWhere('gid', '=', gid)
+        .groupBy('gid')
+        .then(function(result) {
             total_jour = result[0].total_jour;
-	    console.log('total_jour below :');
-	    console.log( result[0].total_jour);
-	    cb(total_tranche/total_jour);
-	}, function(err) {
-	    console.log("_getTotalJour SQL Error: " + err);
-	});    
+            console.log('total_jour below :');
+            console.log(result[0].total_jour);
+            cb(total_tranche / total_jour);
+        }, function(err) {
+            console.log("_getTotalJour SQL Error: " + err);
+        });
 }
-
-
