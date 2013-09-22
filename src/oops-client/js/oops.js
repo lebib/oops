@@ -113,7 +113,8 @@ oops.checkPlace = function(lat, lon, date) {
             var html;
             var t = result.tarif;
             if (result.stats) {
-                tColor = t || 'gris';
+                var tColor = t || 'gris';
+                var indice = result.incide || 1;
                 html = '<div class="popupPrices '+tColor+'">';
                 if (t) {
                     html += '<div class="popupTarifTitle">';
@@ -126,13 +127,16 @@ oops.checkPlace = function(lat, lon, date) {
                     html += '<div class="popupNoPrice">Aucun<br />tarif</div>';
                 }
                 html += '</div>';
-                html += '<div class="popupProba"></div>';
-                html += '<div class="clearfix"></div><div class="distance"></div><button id="popupButton" class="ui-btn">Plus d\'informations</button>';
+                html += '<div class="popupProba"><div class="title">Risque de passage<br />d\'une pervenche<br />dans l\'heure qui suit</div><div class="proba">'+Math.round(result.stats*100)+'%</div><div class="indice">('+indice+'/5)</div><div class="label">Indice<br />de confiance</div><div class="clearfix"></div></div>';
+
+                html += '<div class="clearfix"></div>';
+                if (result.racketmachine && result.racketmachine.distance) {
+                    html += '<div class="popupDistance"><div class="metres">'+Math.round(result.racketmachine.distance)+' m</div><div class="label">Distance de l\'horodateur le plus proche</div><div class="clearfix"></div></div>'
+                }
+                html += '<button id="popupButton" class="ui-btn">Plus d\'informations</button>';
             } else {
                 html = '<div class="popupNoInfo">Nous n\'avons aucune information pour cette rue à cet horaire.</div>';
             }
-            $("#popupButton")
-                .button();
             var style = {
                 weight: 5,
                 opacity: 0.8,
@@ -142,7 +146,7 @@ oops.checkPlace = function(lat, lon, date) {
             var betterPay = false;
             if (!currentPopup) {
                 currentPopup = L.popup({
-                    minWidth: 420,
+                    minWidth: 381,
                     closeButton: false
                 });
             }
@@ -243,7 +247,7 @@ oops.showGraph = function(datas) {
         /*
             TODO GRAPHZ:
             * prunes par heures 
-            * % probabilité d'allumage par une pervanche
+            * % probabilité d'allumage par une pervenche
             * 
          */
         // Render the image.
