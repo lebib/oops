@@ -24,7 +24,7 @@ exports.checkPlace = function(lat, lon, date, cb) {
     date = date || new Date();
     getNearRoad(lat, lon, 1, function(result) {
         if (!result) {
-            cb("No road found found");
+            console.log("No road found found");
         } else {
             getNearRacketMachines(lat, lon, function(racketmachine) {
                 getPlaceInfoz(result, date, function(place) {
@@ -68,7 +68,6 @@ exports.getPlaceInfoz = getPlaceInfoz = function(arr, date, cb) {
         cb(ret);
     })
 }
-
 
 exports.addPruneForRoad = addPruneForRoad = function(roadGid, date, comment, cb) {
     if (!roadGid) {
@@ -192,7 +191,6 @@ var getNearRacketMachines = function(lat, lon, cb) {
 }
 
 var _getRoadStatFromGid = function(gid, date, cb) {
-    console.log(gid);
     date = date || new Date();
     date_left = date.getTime() / 1000;
     date_right = date;
@@ -223,6 +221,8 @@ var _getRoadStatFromGid = function(gid, date, cb) {
                 console.log('total_tranche below:');
                 console.log(result[0].total_tranche);
                 _getTotalJour(total_tranche, gid, where_dow, cb);
+            } else {
+                cb(null);
             }
         }, function(err) {
             console.log("_getRoadStatFromGid SQL Error: " + err);

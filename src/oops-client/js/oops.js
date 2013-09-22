@@ -8,20 +8,53 @@ var currentLayer = null
 var currentPopup = null;
 var plot = null;
 var mapObj;
-var myCoords = {lat: 43.6024, lon: 3.87414};
+var myCoords = {
+    lat: 43.6024,
+    lon: 3.87414
+};
 var marker;
+
+var oTarifs = {
+    jaune: ['Limité à 2 heures', {
+        "1ère demi-heure": 1,
+        "45 minutes": "1.50",
+        "1 heure": "2",
+        "1 heure 15": "2.50",
+        "1 heure 30": "3",
+        "1 heure 45": "3.50",
+        "2 heures": "4"
+    }],
+    orange: ['Limité à 5 heures', {
+        "1": "1.30",
+        "2": "2.60",
+        "3": "3.10",
+        "4": "3.60",
+        "5": "4"
+    }],
+    vert: ['Limité à 9 heures', {
+        "1": "0.80",
+        "2": "1.20",
+        "3": "1.40",
+        "4": "1.50",
+        "5": "1.60",
+        "6": "1.70",
+        "7": "1.80",
+        "8": "1.90",
+        "9": 2
+    }]
+};
 
 oops.loadTemplate = function(name) {
     $("#content")
         .html(tpl(name));
     $('#content')
         .trigger('create');
-}
+};
 
 oops.initMap = function() {
     mapObj = new L.Map('map', {
         center: new L.LatLng(myCoords.lat, myCoords.lon),
-        zoom: 18
+        zoom: 17
     });
     var osm = new L.TileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png');
 
@@ -36,26 +69,32 @@ oops.initMap = function() {
     mapObj.addLayer(osm);
     var popup = L.popup();
 
-   $(window)
+    $(window)
         .on("pagechange", function(event, ui) {
             if ($.mobile.activePage.attr('id') == 'mappage') {
-                $('#map').height($(window).height() - 43);
+                $('#map')
+                    .height($(window)
+                        .height() - 43);
                 mapObj.invalidateSize(false);
             } else {
-                $('div[data-rolo=content]').height($(window).height() - 43);
+                $('div[data-rolo=content]')
+                    .height($(window)
+                        .height() - 43);
             }
         });
 
-}
+};
 
 onError = function(error) {
-    console.log("Error setting map position: "+error);
     oops.initMap();
-}
+};
 
-oops.setPosition = function (position) {
+oops.setPosition = function(position) {
     if (position.coords.latitude) {
-        myCoords = {lat: position.coords.latitude, lon: position.coords.longitude}
+        myCoords = {
+            lat: position.coords.latitude,
+            lon: position.coords.longitude
+        }
     }
     oops.initMap();
 }
@@ -66,64 +105,71 @@ oops.checkPlace = function(lat, lon, date) {
         data: {
             lat: lat,
             lon: lon,
-	    date: date
+            date: date
         }
     })
         .done(function(result) {
             console.log(result);
-	    console.log('Yo!');
-            var prunesList = [];
-            var html = '<div class="popupTitle">Contraventions relevées dans cette rue</div>';
+            var html;
+            var t = result.tarif;
+            if (result.stats) {
+                tColor = t || 'gris';
+                html = '<div class="popupPrices '+tColor+'">';
+                if (t) {
+                    html += '<div class="popupTarifTitle">';
+                        html += oTarifs[t][0] + '</div><div class="popupPricesList">';
+                    for (var key in oTarifs[t][1]) {
+                        html += '<div class="popupPriceLine">' + key + ': ' + oTarifs[t][1][key] + ' €</div>';
+                    }
+                    html += '</div>';
+                } else {
+                    html += '<div class="popupNoPrice">Aucun<br />tarif</div>';
+                }
+                html += '</div>';
+                html += '<div class="popupProba"></div>';
+                html += '<div class="clearfix"></div><div class="distance"></div><button id="popupButton" class="ui-btn">Plus d\'informations</button>';
+            } else {
+                html = '<div class="popupNoInfo">Nous n\'avons aucune information pour cette rue à cet horaire.</div>';
+            }
+            $("#popupButton")
+                .button();
             var style = {
                 weight: 5,
                 opacity: 0.8,
                 color: "#777777"
             }
-	    var price=2.5;
-	    var betterPay = false;
+            var price = 2.5;
+            var betterPay = false;
             if (!currentPopup) {
-                currentPopup = L.popup();
+                currentPopup = L.popup({
+                    minWidth: 420,
+                    closeButton: false
+                });
             }
             if (currentLayer) {
                 mapObj.removeLayer(currentLayer);
             }
-	    console.log('here ?');
-            result.forEach(function(line) {
-                switch (line.tarif) {
+            switch (result.tarif) {
                 case 'jaune':
-                    style.color = "#FFFF00";
+                    style.color = "#e9e100";
                     price = 4;
-		    break;
+                    break;
                 case 'orange':
-                    style.color = "#FFBF00";
-		    price = 2.60; 
+                    style.color = "#ff6600";
+                    price = 2.60;
                     break;
                 case 'vert':
-                    style.color = "#01DF01";
-		    price = 1.20;
+                    style.color = "#3dbb25";
+                    price = 1.20;
                     break;
-                }
-		if(line.stats.lenght()>0){
-		    betterPay = (price < (line.stats * 17));
-		}
-		line.betterPay = betterPay;
-		console.log(line.betterPay);
-		console.log('dafuQ');
-                if (line.prunes.length) {
-                    line.prunes.forEach(function(p) {
-                        var n = p.prune_date.match(/([0-9]+)/g);
-                        var day = n[0] + '/' + n[1] + '/' + n[2];
-                        var hour = n[3] + 'h ' + n[4] + 'min';
-                        prunesList.push('Le ' + day + ' à ' + hour);
-                    })
-                }
-                html += prunesList.join("<br />");
-                //prunesList.push(JSON.parse(line.prunes));
-                currentLayer = L.geoJson(JSON.parse(line.geojson), {
-                    style: style
-                })
-                    .addTo(mapObj);
-            });
+            }
+            if (result.stats > 0) {
+                betterPay = (price < (result.stats * 17));
+            }
+            currentLayer = L.geoJson(JSON.parse(result.geojson), {
+                style: style
+            })
+                .addTo(mapObj);
 
             var markerLatLng = marker.getLatLng();
             currentPopup.setLatLng([markerLatLng.lat, markerLatLng.lng]);
@@ -216,5 +262,15 @@ oops.showGraph = function(datas) {
          */
         // Render the image.
         plot.draw();
+    }
+}
+
+function launchFullScreen(element) {
+    if (element.requestFullScreen) {
+        element.requestFullScreen();
+    } else if (element.mozRequestFullScreen) {
+        element.mozRequestFullScreen();
+    } else if (element.webkitRequestFullScreen) {
+        element.webkitRequestFullScreen();
     }
 }
