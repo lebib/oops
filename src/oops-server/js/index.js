@@ -25,7 +25,7 @@ exports.checkPlace = function(lat, lon, date, cb) {
         } else {
             getNearRacketMachines(lat, lon, function(racketmachine) {
                 getPlaceInfoz(result, date, function(place) {
-                    place[0].racketmachine = racketmachine[0];
+                    place.racketmachine = racketmachine[0];
                     cb(place);
                 })
             });
@@ -40,7 +40,7 @@ exports.addPrune = addPrune = function(lat, lon, date, comment, cb) {
 }
 
 exports.getPlaceInfoz = getPlaceInfoz = function(arr, date, cb) {
-    var ret ={};
+    var ret = {};
     var recursive = false;
     console.log('Get da place infoz !');
     var gid = null;
@@ -61,7 +61,6 @@ exports.getPlaceInfoz = getPlaceInfoz = function(arr, date, cb) {
     _getRoadStatFromGid(gid, date, function(stats) {
         console.log('Da statz below :');
 	console.log(stats);
-	console.log(ret);
         ret.stats = stats;
         cb(ret);
     })
@@ -179,7 +178,7 @@ var getNearRacketMachines = function(lat, lon, cb) {
                 .select(knex.raw("ST_Distance_Sphere(ST_Transform(ST_SetSRID(ST_GeomFromText('" + racketmachine[0].geom + "'), 2154), 4326), ST_SetSRID(ST_MakePoint(" + lon + ", " + lat + "), 4326)) as distance"))
                 .limit(1)
                 .then(function(res) {
-                    racketmachine.distance = res[0].distance;
+                    racketmachine[0].distance = res[0].distance;
                     cb(racketmachine);
                 }, function(err) {
                     console.log("getNearRacketMachines SQL Error: " + err);
