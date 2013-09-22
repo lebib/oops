@@ -58,12 +58,13 @@ oops.setPosition = function (position) {
     oops.initMap();
 }
 
-oops.checkPlace = function(lat, lon) {
+oops.checkPlace = function(lat, lon, date) {
     $.ajax({
         url: "/checkPlace",
         data: {
             lat: lat,
-            lon: lon
+            lon: lon,
+	    date: date
         }
     })
         .done(function(result) {
