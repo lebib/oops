@@ -69,6 +69,7 @@ oops.checkPlace = function(lat, lon, date) {
     })
         .done(function(result) {
             console.log(result);
+	    console.log('Yo!');
             var prunesList = [];
             var html = '<div class="popupTitle">Contraventions relevées dans cette rue</div>';
             var style = {
@@ -76,24 +77,36 @@ oops.checkPlace = function(lat, lon, date) {
                 opacity: 0.8,
                 color: "#777777"
             }
+	    var price;
+	    var betterPay = FALSE;
             if (!currentPopup) {
                 currentPopup = L.popup();
             }
             if (currentLayer) {
                 mapObj.removeLayer(currentLayer);
             }
+	    console.log('here ?');
             result.forEach(function(line) {
                 switch (line.tarif) {
-                    case 'jaune':
-                        style.color = "#FFFF00";
-                        break;
-                    case 'orange':
-                        style.color = "#FFBF00";
-                        break;
-                    case 'vert':
-                        style.color = "#01DF01";
-                        break;
+                case 'jaune':
+                    style.color = "#FFFF00";
+                    price = 4;
+		    break;
+                case 'orange':
+                    style.color = "#FFBF00";
+		    price = 2.60; 
+                    break;
+                case 'vert':
+                    style.color = "#01DF01";
+		    price = 1.20;
+                    break;
                 }
+		if(line.stats.lenght()>0){
+		    betterPay = (price < (line.stats * 17));
+		}
+		line.betterPay = betterPay;
+		console.log(line.betterPay);
+		console.log('dafuQ');
                 if (line.prunes.length) {
                     line.prunes.forEach(function(p) {
                         var n = p.prune_date.match(/([0-9]+)/g);
