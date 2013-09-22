@@ -38,6 +38,8 @@ oops.initMap = function() {
    $(window)
         .on("pagechange", function(event, ui) {
             if ($.mobile.activePage.attr('id') == 'mappage') {
+                $('#map').height($(window).height() - 117);
+                console.log($('#map').height());
                 mapObj.invalidateSize(false);
             }
         });
