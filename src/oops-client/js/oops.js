@@ -112,7 +112,7 @@ oops.checkPlace = function(lat, lon, date) {
             console.log(result);
             var html;
             var t = result.tarif;
-            if (result.stats) {
+            if (result.ratio) {
                 var tColor = t || 'gris';
                 var indice = result.incide || 1;
                 html = '<div class="popupPrices '+tColor+'">';
@@ -127,7 +127,7 @@ oops.checkPlace = function(lat, lon, date) {
                     html += '<div class="popupNoPrice">Aucun<br />tarif</div>';
                 }
                 html += '</div>';
-                html += '<div class="popupProba"><div class="title">Risque de passage<br />d\'une pervenche<br />dans l\'heure qui suit</div><div class="proba">'+Math.round(result.stats*100)+'%</div><div class="indice">('+indice+'/5)</div><div class="label">Indice<br />de confiance</div><div class="clearfix"></div></div>';
+                html += '<div class="popupProba"><div class="title">Risque de passage<br />d\'une pervenche<br />dans l\'heure qui suit</div><div class="proba">'+Math.round(result.ratio*100)+'%</div><div class="indice">('+Math.round(result.indice+1)+'/5)</div><div class="label">Indice<br />de confiance</div><div class="clearfix"></div></div>';
 
                 html += '<div class="clearfix"></div>';
                 if (result.racketmachine && result.racketmachine.distance) {
