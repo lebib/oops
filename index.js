@@ -52,11 +52,18 @@ function initExpress() {
 		res.sendfile(__dirname + '/public/index.html');
 	});
 
-	app.get('/checkPlace', function(req, res) {
+    app.get('/checkPlace', function(req, res) {
 		oops.checkPlace(req.query.lat, req.query.lon, req.query.date, function(result) {
-			res.json(req, result);
+		    res.json(req, result);
 		});
 	});
+
+    app.get('/getChartDataz', function(req, res){
+	oops.getChartDataz(req.query.lat, req.query.lon, req.query.date, function(result){
+	    console.log(req.query.lat);
+	    res.json(req, result);
+	});
+    });
 
 	app.get('/getRoadStat', function(req, res) {
 		oops.getRoadStat(req.query.lat, req.query.lon, req.query.date, function(result) {

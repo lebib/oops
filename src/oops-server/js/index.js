@@ -18,17 +18,19 @@ exports.init = function(config, cb) {
 };
 
 exports.checkPlace = function(lat, lon, date, cb) {
+    console.log('take this');
+    console.log(lat);
+    console.log(lon);
     date = date || new Date();
     getNearRoad(lat, lon, 1, function(result) {
         if (!result) {
-            cb("No road found found");
+            console.log("No road found found");
         } else {
             getNearRacketMachines(lat, lon, function(racketmachine) {
-                getPrunes(result, date, function(prunes) {
-                    prunes[0].racketmachine = racketmachine[0];
-                    console.log(prunes);
-                    cb(prunes);
-                }, 0)
+                getPlaceInfoz(result, date, function(place) {
+                    place.racketmachine = racketmachine[0];
+                    cb(place);
+                })
             });
         }
     })
@@ -40,55 +42,32 @@ exports.addPrune = addPrune = function(lat, lon, date, comment, cb) {
     })
 }
 
-exports.getPrunes = getPrunes = function(arr, date, cb, i, ret) {
-    var ret = ret || [];
+exports.getPlaceInfoz = getPlaceInfoz = function(arr, date, cb) {
+    var ret = {};
     var recursive = false;
-    console.log('Get da prune !');
+    console.log('Get da place infoz !');
     var gid = null;
     var geojson = null;
     if (typeof(arr) == 'string') {
+	console.log('oh');
         gid = arr.gid;
         geojson = arr.geojson;
         tarif = arr.tarif;
     } else {
-        gid = arr[i].gid;
-        geojson = arr[i].geojson;
-        tarif = arr[i].tarif;
-        recursive = true;
+        gid = arr[0].gid;
+        geojson = arr[0].geojson;
+        tarif = arr[0].tarif;
     }
-    knex("prunes")
-        .select(['pid', 'prune_date', 'comment'])
-        .where({
-            gid: gid
-        })
-        .then(function(prunes) {
-            if ((i || i === 0) && recursive) {
-                ret[i] = {};
-                ret[i].geojson = geojson;
-                ret[i].prunes = prunes;
-                ret[i].tarif = tarif;
-                _getRoadStatFromGid(gid, date, function(stats) {
-                    console.log('Da statz below :');
-                    ret[i].stats = stats;
-                    i++;
-                    if (i < arr.length) {
-                        getPrunes(arr, cb, i, ret);
-                    } else {
-                        cb(ret)
-                    }
-                })
-            } else {
-                _getRoadStatFromGid(gid, date, function(stats) {
-                    ret['geojson'] = geojson;
-                    ret['prunes'].push(prunes);
-                    cb(bull, ret);
-                });
-            }
-        }, function(err) {
-            cb(err);
-        })
+    ret.gid = gid;
+    ret.geojson = geojson;
+    ret.tarif = tarif;
+    _getRoadStatFromGid(gid, date, function(stats) {
+        console.log('Da statz below :');
+	console.log(stats);
+        ret.stats = stats;
+        cb(ret);
+    })
 }
-
 
 exports.addPruneForRoad = addPruneForRoad = function(roadGid, date, comment, cb) {
     if (!roadGid) {
@@ -201,7 +180,7 @@ var getNearRacketMachines = function(lat, lon, cb) {
                 .select(knex.raw("ST_Distance_Sphere(ST_Transform(ST_SetSRID(ST_GeomFromText('" + racketmachine[0].geom + "'), 2154), 4326), ST_SetSRID(ST_MakePoint(" + lon + ", " + lat + "), 4326)) as distance"))
                 .limit(1)
                 .then(function(res) {
-                    racketmachine.distance = res[0].distance;
+                    racketmachine[0].distance = res[0].distance;
                     cb(racketmachine);
                 }, function(err) {
                     console.log("getNearRacketMachines SQL Error: " + err);
@@ -242,6 +221,8 @@ var _getRoadStatFromGid = function(gid, date, cb) {
                 console.log('total_tranche below:');
                 console.log(result[0].total_tranche);
                 _getTotalJour(total_tranche, gid, where_dow, cb);
+            } else {
+                cb(null);
             }
         }, function(err) {
             console.log("_getRoadStatFromGid SQL Error: " + err);
@@ -262,4 +243,33 @@ var _getTotalJour = function(total_tranche, gid, where_dow, cb) {
         }, function(err) {
             console.log("_getTotalJour SQL Error: " + err);
         });
+}
+
+exports.getChartDataz = getChartData = function(lat, lon, date, cb){
+    console.log(lat);
+    console.log(lon);
+    var chartDataz = [];
+    date = date || new Date();
+
+    getNearRoad(lat, lon, 1, function(result) {    
+	gid = result[0].gid;
+	_iterateChartDataz(chartDataz, date, 9, gid, cb);
+    })
+}
+
+var _iterateChartDataz = function(chartDataz, date, i, gid, cb){
+	console.log(gid);
+    if(i<19){
+	date.setHours(i);
+	console.log(date);
+	_getRoadStatFromGid(gid, date, function(rez){
+	    if(rez){
+		chartDataz.push([rez,i]);
+	    }
+	    i++;
+	    _iterateChartDataz(chartDataz, date, i, gid, cb);
+	})
+    }else {
+	cb(chartDataz);
+    }
 }
