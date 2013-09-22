@@ -28,7 +28,7 @@ exports.checkPlace = function(lat, lon, date, cb) {
                     console.log(err);
                 }
 
-                getNearRacketMachines(result, function(err, racketmachine) {
+                getNearRacketMachines(lat, lon, function(err, racketmachine) {
                     if (err) {
                         console.log(err);
                     }
@@ -199,16 +199,24 @@ var getNearRoad = function(lat, lon, limit, cb) {
         });
 }
 
-var getNearRacketMachines = function(lat, lon, limit, cb) {
+var getNearRacketMachines = function(lat, lon, cb) {
     lat = parseFloat(lat);
     lon = parseFloat(lon);
-    limit = parseInt(limit) || 1;
     knex("racketmachines")
-        .select(knex.raw("numero, ST_AsGeoJson(ST_Transform(geom, 4326)) as geojson"))
+        .select(knex.raw("numero, geom, ST_AsGeoJson(ST_Transform(geom, 4326)) as geojson"))
         .orderBy(knex.raw("ST_Transform(ST_SetSRID(ST_MakePoint(" + lon + ", " + lat + "), 4326), 2154) <-> geom"))
-        .limit(limit)
-        .then(function(result) {
-            cb(result);
+        .limit(1)
+        .then(function(racketmachine) {
+            console.log(ST_Transform(ST_SetSRID(ST_MakePoint(" + lon + ", " + lat + "), 4326), 2154));
+            knex("racketmachines")
+            .select(knex.raw("SELECT ST_Distance(ST_SetSRID(GeomFromWKB('"+racketmachine.geom+"'), 2154), ST_Transform(ST_SetSRID(ST_MakePoint(" + lon + ", " + lat + "), 4326), 2154))"))
+            .then(function(distance) {
+                console.log('  -- distance 00 ');
+                console.log(distance);
+            }, function(err) {
+              console.log("getNearRacketMachines SQL Error: " + err);
+            })
+            cb(racketmachine);
         }, function(err) {
             console.log("getNearRacketMachines SQL Error: " + err);
         });
