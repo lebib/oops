@@ -40,8 +40,9 @@ oops.initMap = function() {
         .on("pagechange", function(event, ui) {
             if ($.mobile.activePage.attr('id') == 'mappage') {
                 $('#map').height($(window).height() - 43);
-                console.log($('#map').height());
                 mapObj.invalidateSize(false);
+            } else {
+                $('div[data-rolo=content]').height($(window).height() - 43);
             }
         });
 
