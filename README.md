@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 OOPS
 
 # INSTALL
@@ -39,3 +40,9 @@ Install described for Debian, too lazy so update for your distro.
 
 - Inject racketmachine
 [postgres@biatch oops] psql oops -f resources/sql/racketmachines.sql
+=======
+oops
+====
+
+Projet OOPS!
+>>>>>>> 98bcbbaca7b5fe3b25f4fcfd9a35000c0e1a1ee9
