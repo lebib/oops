@@ -4,13 +4,13 @@ OOPS
 
   # Install Node 
 
-  sudo apt-get install python g++ make checkinstall
-  mkdir ~/src && cd $_	
-  wget -N http://nodejs.org/dist/node-latest.tar.gz
-  tar xzvf node-latest.tar.gz && cd node-v* #(remove the "v" in front of the version number in the dialog)
-  ./configure
-  checkinstall 
-  sudo dpkg -i node_*
+     	    sudo apt-get install python g++ make checkinstall
+	    mkdir ~/src && cd $_	
+	    wget -N http://nodejs.org/dist/node-latest.tar.gz
+  	    tar xzvf node-latest.tar.gz && cd node-v* #(remove the "v" in front of the version number in the dialog)
+  	    ./configure
+  	    checkinstall 
+  	    sudo dpkg -i node_*
 
 
   # Install Postgresql + PostGis
@@ -51,47 +51,47 @@ OOPS
 
 - Create postgres database
 
-  	 [postgres@biatch ~]$ createdb oops
+  	   	 [postgres@biatch ~]$ createdb oops
 
 - Inject postgis datas into the database
 
   * With postgis 2.0
-	[postgres@biatch ~]$ psql -d oops -c "CREATE EXTENSION postgis;"
+	 	 [postgres@biatch ~]$ psql -d oops -c "CREATE EXTENSION postgis;"
 
 - CWD inside the OOPS project and inject Montpellier opendata:
-	[postgres@biatch oops]$ psql oops -f resources/sql/opendata_MTP.sql
+	     	 [postgres@biatch oops]$ psql oops -f resources/sql/opendata_MTP.sql
 
 - Create oops table
-	[postgres@biatch oops]$ psql oops -f resources/sql/oops.sql
+		[postgres@biatch oops]$ psql oops -f resources/sql/oops.sql
 - Create & Inject racketmachine
-  	[postgres@biatch oops]$ psql oops -f resources/sql/racketmachines.sql
+  	   	  [postgres@biatch oops]$ psql oops -f resources/sql/racketmachines.sql
 
 - Create role:
-  	 [postgres@biatch oops]$  psql -c "CREATE USER oops WITH PASSWORD 'pouet';"
+		[postgres@biatch oops]$  psql -c "CREATE USER oops WITH PASSWORD 'pouet';"
 
 - Change database owner
-  	 [postgres@biatch oops]$  psql -c "ALTER DATABASE oops OWNER TO oops;"
+  	 	  [postgres@biatch oops]$  psql -c "ALTER DATABASE oops OWNER TO oops;"
 
 - Change tables owner
-  	 [postgres@biatch oops]$  psql  oops -c "ALTER Table opennodata OWNER TO oops;"
-	 [postgres@biatch oops]$  psql  oops -c "ALTER Table spatial_ref_sys OWNER TO oops;"
-	 [postgres@biatch oops]$  psql  oops -c "ALTER Table prunes OWNER TO oops;"
-	 [postgres@biatch oops]$  psql  oops -c "ALTER Table racketmachines OWNER TO oops;"
+  	 	[postgres@biatch oops]$  psql  oops -c "ALTER Table opennodata OWNER TO oops;"
+	 	[postgres@biatch oops]$  psql  oops -c "ALTER Table spatial_ref_sys OWNER TO oops;"
+		[postgres@biatch oops]$  psql  oops -c "ALTER Table prunes OWNER TO oops;"
+	 	[postgres@biatch oops]$  psql  oops -c "ALTER Table racketmachines OWNER TO oops;"
 
 - Inject fake prunes
-  	 [postgres@biatch oops]$ psql oops -f resources/sql/fake_prunes.sql
+  	      [postgres@biatch oops]$ psql oops -f resources/sql/fake_prunes.sql
 
 - Install node dependencies 
-  	 [user@biatch oops]$ npm install
+  	       [user@biatch oops]$ npm install
   	  
 - Configure da project :
-  	 [user@biatch oops]$ cp config/config.json.dist  config/config.json
-	 [user@biatch oops]$ vim config/config.json # Edit the file to suite your configuration
+  	        [user@biatch oops]$ cp config/config.json.dist  config/config.json
+	    	[user@biatch oops]$ vim config/config.json # Edit the file to suite your configuration
 
 
 
 # Launch the application : 
-  	 [user@biatch oops]$ grunt
+  	     [user@biatch oops]$ grunt
 
 
 
