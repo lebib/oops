@@ -57,7 +57,7 @@ OOPS
 
   * With postgis 2.0
 
-	 	 [postgres@biatch ~]$ psql -d oops -c "CREATE EXTENSION postgis;"
+    	 	 	 [postgres@biatch ~]$ psql -d oops -c "CREATE EXTENSION postgis;"
 
 - CWD inside the OOPS project and inject Montpellier opendata:
 
@@ -75,6 +75,7 @@ OOPS
 		[postgres@biatch oops]$  psql -c "CREATE USER oops WITH PASSWORD 'pouet';"
 
 - Change database owner
+
   	 	  [postgres@biatch oops]$  psql -c "ALTER DATABASE oops OWNER TO oops;"
 
 - Change tables owner
