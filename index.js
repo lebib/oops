@@ -55,6 +55,7 @@ function initExpress() {
     app.get('/checkPlace', function(req, res) {
 		oops.checkPlace(req.query.lat, req.query.lon, req.query.date, function(result) {
 		    res.json(req, result);
+		    //console.log(req);
 		});
 	});
 
@@ -72,6 +73,7 @@ function initExpress() {
 	});
 
 	app.post('/addPrune', function(req, res) {
+	    console.log("addPrune ?");
 		oops.addPrune(req.body.lat, req.body.lon, req.body.date, req.body.comment, function(result) {
 			console.log("ADDED");
 			res.json(req, result);
@@ -97,3 +99,4 @@ function initExpress() {
 //oops.injectFakeDatas();
 
 //console.log('une saloperie');
+console.log(config.database.password);

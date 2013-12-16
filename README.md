@@ -89,6 +89,10 @@ OOPS
 
   	      [postgres@biatch oops]$ psql oops -f resources/sql/fake_prunes.sql
 
+- Change authentication method in /etc/postgresql/X.Y/main/pg_hba.conf 
+
+  	 	local   all         all                               trust     # replace ident or peer with trust
+
 - Install node dependencies 
 
   	       [user@biatch oops]$ npm install

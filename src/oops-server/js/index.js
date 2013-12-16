@@ -9,7 +9,7 @@ exports.init = function(config, cb) {
         connection: {
             host: config.database.host,
             user: config.database.user,
-            password: config.database.user.password,
+            password: config.database.password,
             database: config.database.database,
             charset: config.database.charset
         }
@@ -36,7 +36,10 @@ exports.checkPlace = function(lat, lon, date, cb) {
 exports.addPrune = addPrune = function(lat, lon, date, comment, cb) {
     console.log(' ----- '+lat+' -- '+lon+' ----'+date);
     getNearRoad(lat, lon, 1, function(result) {
-        addPruneForRoad(result.gid, date, comment, cb); // corrigé data en date, arg 2
+	console.log(result);
+	console.log(result[0]);
+	console.log(result[0].gid);
+        addPruneForRoad(result[0].gid, date, comment, cb); // corrigé data en date, arg 2
     })
 }
 

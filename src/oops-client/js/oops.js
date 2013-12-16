@@ -242,6 +242,7 @@ oops.addPrune = function(lat, lon) {
         return;
     }
     var datetime = date+' '+time+':00';
+    // TODO : Convert datetime in timestamp for Postgresql
     $.ajax({
         url: "/addPrune",
         method: "post",
