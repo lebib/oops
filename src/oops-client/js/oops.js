@@ -241,8 +241,8 @@ oops.addPrune = function(lat, lon) {
         toast("Veuillez renseigner tous les champs");
         return;
     }
-    var datetime = date+' '+time+':00';
-    // TODO : Convert datetime in timestamp for Postgresql
+    var datetime = date+' '+time + ":00" ;
+    //console.log("Datetime : " + datetime);
     $.ajax({
         url: "/addPrune",
         method: "post",
