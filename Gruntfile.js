@@ -38,19 +38,24 @@ module.exports = function(grunt) {
 		},
 		nodemon: {
 			server: {
-				options: {
-					file: 'index.js',
-					args: ['development'],
-					nodeArgs: ['--debug'],
-					ignoredFiles: ['Gruntfile.js', 'public/**/*js', 'src/oops-client/**/*js'],
-					watchedExtensions: ['js'],
-					delayTime: 1,
-					env: {
-						PORT: '8181'
-					},
-					cwd: __dirname
-				}
-			}
+                                script: 'index.js',
+                                options: {
+                                        args: ['dev'],
+                                        callback: function (nodemon) {
+                                                nodemon.on('log', function (event) {
+                                                  console.log(event.colour);
+                                                });
+                                              },
+                                        nodeArgs: ['--debug'],
+                                        ignore: ['Gruntfile.js', 'public/**/*js', 'src/oops-client/**/*js'],
+                                        ext: 'js',
+                                        delay: 1,
+                                        env: {
+                                                PORT: '8181'
+                                        },
+                                        cwd: __dirname
+                                }
+                        }
 
 		},
 		concurrent: {
